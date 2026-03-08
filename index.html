@@ -4,456 +4,523 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goofre OS | Agentic Commerce Orchestrator</title>
-    <!-- Fonts -->
+    <title>Goofre | pitch_deck.v1</title>
+    <!-- Google Fonts: Inter and Outfit for a modern, sleek look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        goofre: '#5B249A',
-                        bg: '#0A0A0B',
-                        pane: '#121214',
-                        bordercolor: '#27272A',
-                        muted: '#A1A1AA',
-                        bodytext: '#E4E4E7',
-                        googlered: '#EA4335',
-                        googlegreen: '#34A853',
-                        googleblue: '#4285F4'
+                        goofre: '#5F3192',
+                        'goofre-bg': '#F8F9FA',
+                        'goofre-accent': '#E9E3F5',
+                        'goofre-text': '#212529',
+                        'google-blue': '#4285F4',
+                        'google-red': '#EA4335',
+                        'google-yellow': '#FBBC05',
+                        'google-green': '#34A853'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        mono: ['Fira Code', 'monospace']
+                        display: ['Outfit', 'sans-serif']
+                    },
+                    aspectRatio: {
+                        '16/4': '16 / 4',
                     }
                 }
             }
         }
     </script>
-
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
     <style>
-        /* Custom scrollbar for webkit */
         ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #27272A;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #3f3f46;
-        }
-
-        /* Utility to hide scrollbar but keep functionality */
-        .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
 
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            /* IE and Edge */
+        * {
             scrollbar-width: none;
-            /* Firefox */
+            -ms-overflow-style: none;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0A0A0B;
-            color: #E4E4E7;
-            margin: 0;
+            background-color: #F8F9FA;
+            color: #212529;
             overflow: hidden;
-            /* Lock the viewport */
         }
 
-        .tab-button {
-            transition: all 0.2s ease-in-out;
+        .slide-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            height: calc(100vh - 120px);
+            /* Adjust for header and footer */
+            align-items: center;
         }
 
-        /* Active Tab Formatting */
-        .tab-button.active {
-            background-color: #27272A;
-            color: #FFFFFF;
+        .slide {
+            flex: 0 0 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: center;
+            padding: 2rem;
         }
 
-        .tab-button.active-alert {
-            background-color: #27272A;
-            color: #FFFFFF;
+        .slide-content {
+            width: 100%;
+            max-width: 1400px;
+            /* Constrain wide slides */
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 40px -10px rgba(95, 49, 146, 0.1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            /* Aspect ratio logic */
+            aspect-ratio: 16/9;
+            /* Fallback */
         }
 
-        .content-fade {
-            transition: opacity 300ms ease-in-out;
-        }
-
-        /* Typography Formatting in Content Pane */
-        .prose h2 {
-            color: #FFFFFF;
-            font-size: 1.75rem;
-            /* mobile first */
-            line-height: 2.25rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-        }
-
-        @media (min-width: 768px) {
-            .prose h2 {
-                font-size: 2.25rem;
-                line-height: 2.5rem;
+        @media (min-width: 1024px) {
+            .slide-content {
+                aspect-ratio: 16/4;
             }
         }
 
-        .prose p {
-            margin-bottom: 1.5rem;
-            font-weight: 300;
+        /* Abstract branding elements */
+        .glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(95, 49, 146, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
         }
 
-        .prose ul {
-            list-style: none;
-            padding: 0;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
-        .prose li {
-            margin-bottom: 1rem;
+        .wavy-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 13 50 13s16.36 2.347 25.96 5.937l1.768.661c.368.138.731.272 1.088.402H100V0H0v20h21.184z' fill='%235f3192' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
     </style>
 </head>
 
-<body class="h-screen w-screen flex flex-col antialiased selection:bg-goofre selection:text-white">
+<body class="h-screen w-screen selection:bg-goofre selection:text-white flex flex-col">
 
-    <!-- Header -->
-    <header
-        class="h-[72px] flex-shrink-0 border-b border-bordercolor flex items-center justify-between px-4 md:px-8 bg-bg z-10">
-        <div class="flex flex-col justify-center">
-            <h1 class="text-goofre font-bold text-xl md:text-2xl tracking-tight leading-none">Goofre™</h1>
-            <span
-                class="text-muted text-[10px] md:text-[11px] font-mono mt-1 uppercase tracking-widest hidden sm:block">Agentic
-                Commerce Orchestrator
-                (ACO)™</span>
-            <span
-                class="text-muted text-[10px] md:text-[11px] font-mono mt-1 uppercase tracking-widest block sm:hidden">ACO™</span>
+    <!-- Header Navigation -->
+    <header class="h-16 flex items-center justify-between px-8 bg-white border-b border-gray-100 z-50">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-goofre rounded-lg flex items-center justify-center">
+                <span class="text-white font-black text-lg">G</span>
+            </div>
+            <span class="font-display font-extrabold text-xl tracking-tight text-goofre">Goofre™</span>
         </div>
-        <div class="flex gap-4 md:gap-6 text-muted items-center">
-            <a href="https://www.reddit.com/r/Goofre/" target="_blank" rel="noopener noreferrer"
-                class="hover:text-[#FF4500] transition-colors duration-200" aria-label="Reddit">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" />
-                </svg>
-            </a>
-            <a href="https://discord.gg/Ysz4drAc" target="_blank" rel="noopener noreferrer"
-                class="hover:text-[#5865F2] transition-colors duration-200" aria-label="Discord">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" />
-                </svg>
-            </a>
-            <a href="https://x.com/Goofre_UCP" target="_blank" rel="noopener noreferrer"
-                class="hover:text-white transition-colors duration-200" aria-label="X (Twitter)">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
-                </svg>
-            </a>
-            <a href="https://www.linkedin.com/company/goofre" target="_blank" rel="noopener noreferrer"
-                class="hover:text-[#0077b5] transition-colors duration-200" aria-label="LinkedIn">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
-            </a>
-        </div>
+        <nav class="flex gap-4">
+            <a href="/os"
+                class="px-5 py-2 rounded-full border border-goofre/20 text-goofre font-medium text-sm hover:bg-goofre-accent transition-all duration-300">/os
+                Docs</a>
+            <a href="/app"
+                class="px-5 py-2 rounded-full bg-goofre text-white font-medium text-sm hover:shadow-lg hover:shadow-goofre/20 transition-all duration-300">/app
+                PWA</a>
+        </nav>
     </header>
 
-    <!-- Main Workspace -->
-    <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+    <!-- Slide Carousel -->
+    <main class="flex-1 relative">
+        <div id="slider" class="slide-container no-scrollbar">
 
-        <!-- Sidebar Navigation -->
-        <aside
-            class="w-full md:w-[30%] md:min-w-[320px] md:max-w-[400px] border-b md:border-b-0 md:border-r border-bordercolor bg-bg flex flex-col overflow-hidden relative flex-shrink-0">
-            <nav id="tabs-container"
-                class="flex flex-row md:flex-col overflow-x-auto md:overflow-y-auto no-scrollbar gap-1 z-10 relative px-2 py-2 md:py-6 md:px-4 w-full h-auto md:h-full items-center md:items-stretch">
-                <!-- Tabs injected by JS -->
-            </nav>
-            <div
-                class="hidden md:block absolute bottom-6 left-0 right-0 text-center opacity-30 text-xs font-mono pointer-events-none">
-            </div>
-        </aside>
-
-        <!-- Content Pane -->
-        <section class="flex-1 bg-pane relative flex flex-col min-w-0">
-
-            <!-- Breadcrumb Area / Top Padding -->
-            <div class="hidden md:flex h-12 w-full flex-shrink-0 items-end px-12 md:px-16 pt-8">
-                <div class="inline-flex items-center gap-3">
-                    <i data-lucide="terminal" class="w-4 h-4 text-muted"></i>
-                    <span id="breadcrumb-text" class="text-xs font-mono text-muted tracking-widest uppercase">Tab
-                        01</span>
-                    <div class="h-px w-12 bg-bordercolor"></div>
+            <!-- Slide 1: Hero -->
+            <div class="slide" id="slide-1">
+                <div class="slide-content p-12 md:p-20 flex flex-col justify-center items-center text-center relative">
+                    <div class="glow -top-20 -right-20"></div>
+                    <div class="glow -bottom-20 -left-20"></div>
+                    <h1 class="font-display font-extrabold text-7xl md:text-9xl text-goofre mb-4 tracking-tighter">
+                        Goofre™</h1>
+                    <p class="text-xl md:text-3xl font-medium text-gray-500 max-w-2xl px-4">Empowering Canada’s SMBs to
+                        become agentic Commerce ready by adopting Google’s UCP.</p>
+                    <p class="mt-8 font-mono text-xs text-gray-400 tracking-widest uppercase">Pronunciation Guide:
+                        /gu:.fri:/ (Go Free)</p>
+                    <div class="absolute bottom-0 right-0 p-8 opacity-20">
+                        <svg width="200" height="200" viewBox="0 0 200 200" class="text-goofre">
+                            <path d="M0 100 Q 50 50 100 100 T 200 100" fill="none" stroke="currentColor"
+                                stroke-width="2" />
+                            <path d="M0 110 Q 50 60 100 110 T 200 110" fill="none" stroke="currentColor"
+                                stroke-width="2" />
+                            <path d="M0 120 Q 50 70 100 120 T 200 120" fill="none" stroke="currentColor"
+                                stroke-width="2" />
+                        </svg>
+                    </div>
                 </div>
             </div>
 
-            <!-- Scrollable Content Container -->
-            <div id="content-container"
-                class="p-6 md:p-12 lg:p-16 pb-32 flex-1 overflow-y-auto content-fade opacity-0 text-[17px] md:text-lg leading-relaxed tracking-wide prose prose-invert max-w-none md:max-w-[850px]">
-                <!-- Content injected by JS -->
+            <!-- Slide 2: The Problem -->
+            <div class="slide" id="slide-2">
+                <div class="slide-content p-12 bg-[#F4F1F8] relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-white/50 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-12">The Agentic Era is
+                        Leaving SMBs and Developers Behind</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                        <div class="glass-card p-8 rounded-2xl">
+                            <h3 class="font-bold text-xl text-goofre mb-4">The SMB Crisis</h3>
+                            <p class="text-gray-600 leading-relaxed text-sm">Agentic commerce (one-click purchasing) is
+                                the new standard, but Canadian SMBs are locked out. They lack the tech stack to navigate
+                                the complex Google commerce centric stack.</p>
+                        </div>
+                        <div class="glass-card p-8 rounded-2xl border-goofre/20 bg-white shadow-xl">
+                            <h3 class="font-bold text-xl text-goofre mb-4">The Protocol Bottleneck</h3>
+                            <p class="text-gray-600 leading-relaxed text-sm">Google’s Universal Commerce Protocol (UCP)
+                                is the best framework, but it is siloed and too heavy for a local merchant to deploy.
+                            </p>
+                        </div>
+                        <div class="glass-card p-8 rounded-2xl">
+                            <h3 class="font-bold text-xl text-goofre mb-4">The Developer Dilemma</h3>
+                            <h3 class="text-gray-600 leading-relaxed text-sm">As legacy e-commerce platforms automate,
+                                thousands of freelance ecom-developers are watching their traditional skill sets (store
+                                design) evaporate.</h3>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Mobile: Sticky Bottom CTA / Desktop: Floating CTA -->
-            <div
-                class="fixed md:absolute bottom-0 right-0 left-0 md:left-auto md:bottom-8 md:right-8 z-20 p-4 bg-pane/90 backdrop-blur-sm border-t border-bordercolor md:border-none md:bg-transparent md:backdrop-blur-none md:p-0">
-                <a href="https://github.com/goofre-opensource/agentic_commerce_orchestrator_ACO" target="_blank"
-                    rel="noopener noreferrer"
-                    class="w-full md:w-auto bg-goofre hover:bg-[#7b2cbf] text-white font-medium py-3.5 px-6 rounded flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_0_20px_rgba(98,0,234,0.25)] hover:shadow-[0_0_35px_rgba(98,0,234,0.45)] border border-[#7b2cbf]/30">
-                    <i data-lucide="github" class="w-[18px] h-[18px]"></i>
-                    <span class="tracking-wide">Fork on GitHub</span>
-                </a>
-            </div>
-        </section>
+            <!-- Slide 3: Ecosystem -->
+            <div class="slide" id="slide-3">
+                <div class="slide-content p-12 flex flex-col items-center justify-center text-center">
+                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-4">The Goofre
+                        Orchestration Ecosystem</h2>
+                    <p class="text-gray-500 mb-12">A three-tier architecture turning complexity into voice-activated
+                        simplicity.</p>
 
+                    <div class="w-full max-w-4xl space-y-4">
+                        <div class="p-6 bg-[#212529] text-white rounded-xl shadow-lg border-b-4 border-goofre">
+                            <div class="font-bold text-lg mb-1">1. The Engine (Goofre OS)</div>
+                            <div class="text-xs text-gray-400 font-mono">Open-source middleware translating the heavy
+                                Google UCP stack (GMC, Analytics, Search Console, Ads).</div>
+                        </div>
+                        <div class="relative py-2">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-30"><i
+                                    data-lucide="arrow-down" class="text-goofre"></i></div>
+                        </div>
+                        <div
+                            class="p-8 bg-goofre/5 border-2 border-goofre rounded-2xl shadow-[0_0_30px_rgba(95,49,146,0.15)] relative">
+                            <div class="absolute -inset-1 bg-goofre/10 blur-xl rounded-2xl -z-10"></div>
+                            <div class="font-bold text-xl text-goofre mb-2">2. The Interface (Goofre App) <span
+                                    class="text-[10px] bg-goofre text-white px-2 py-0.5 rounded-full ml-2">Hack Canada
+                                    2026 Build</span></div>
+                            <div class="text-sm text-gray-700">A voice-activated "Bento" Command Center. Distills deep
+                                AI insights into a 4-quadrant interface.</div>
+                        </div>
+                        <div class="relative py-2">
+                            <div class="absolute inset-0 flex items-center justify-center opacity-30"><i
+                                    data-lucide="arrow-down" class="text-gray-400"></i></div>
+                        </div>
+                        <div class="p-6 bg-white border border-gray-100 rounded-xl">
+                            <div class="font-bold text-lg text-gray-800 mb-1">3. The Orchestrator</div>
+                            <div class="text-xs text-gray-500">Empowering displaced developers to manage the Goofre OS
+                                for merchants, turning them into essential AI operators.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: GTM -->
+            <div class="slide" id="slide-4">
+                <div class="slide-content p-12 md:p-20 relative bg-white">
+                    <div class="absolute top-0 right-0 p-12 opacity-5"><i data-lucide="map"
+                            class="w-64 h-64 text-goofre"></i></div>
+                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-16">A Dual-Sided
+                        Go-To-Market Opportunity</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 relative z-10">
+                        <div class="space-y-6">
+                            <div class="text-xs font-mono tracking-widest text-[#666] uppercase">B2C: The Canadian SMB
+                                Retailer</div>
+                            <ul class="space-y-8">
+                                <li class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-goofre/10 flex items-center justify-center text-goofre font-bold">
+                                        TAM</div>
+                                    <div><span class="block text-2xl font-bold">~150,000+</span> <span
+                                            class="text-sm text-gray-500">retail SMBs in Canada.</span></div>
+                                </li>
+                                <li class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-goofre/10 flex items-center justify-center text-goofre font-bold">
+                                        SAM</div>
+                                    <div><span class="block text-2xl font-bold">~45,000</span> <span
+                                            class="text-sm text-gray-500">tech-forward SMBs.</span></div>
+                                </li>
+                                <li class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-goofre flex items-center justify-center text-white font-bold">
+                                        SOM</div>
+                                    <div><span class="block text-4xl font-black text-goofre">3,000</span> <span
+                                            class="text-sm text-gray-500">local merchants for initial rollout.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="space-y-6 p-10 bg-gray-50 rounded-3xl border border-gray-100">
+                            <div class="text-xs font-mono tracking-widest text-[#666] uppercase">B2B: The Developer
+                                Ecosystem</div>
+                            <div class="space-y-4">
+                                <p class="text-gray-600">TAM: ~25,000 freelance/agency web developers in Canada.</p>
+                                <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-goofre w-[15%]"></div>
+                                </div>
+                                <div class="pt-8">
+                                    <span class="text-sm text-gray-500 uppercase tracking-widest">Target:</span>
+                                    <div class="text-6xl font-black text-goofre mt-2">300</div>
+                                    <p class="text-gray-600 mt-2">Canadian developers to onboard by June 2026.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Competitors -->
+            <div class="slide" id="slide-5">
+                <div class="slide-content p-12 bg-gray-50 flex flex-col">
+                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-12 text-center">
+                        Competitive Advantage</h2>
+                    <div class="flex-1 overflow-x-auto">
+                        <table class="w-full text-left border-collapse bg-white rounded-2xl overflow-hidden shadow-sm">
+                            <thead>
+                                <tr class="bg-goofre text-white">
+                                    <th class="p-6">Feature</th>
+                                    <th class="p-6">Legacy Stack (Shopify/Magento)</th>
+                                    <th class="p-6">AI Native (OpenAI/Claude)</th>
+                                    <th class="p-6 bg-white text-goofre border-l-4 border-goofre">The Goofre Difference
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm text-gray-600">
+                                <tr class="border-b border-gray-100">
+                                    <td class="p-6 font-bold">Commerce Source</td>
+                                    <td class="p-6">Passive Web Storefront</td>
+                                    <td class="p-6">General Reasoning</td>
+                                    <td
+                                        class="p-6 bg-goofre/5 border-l-4 border-goofre text-goofre font-semibold italic">
+                                        Native UCP Connection</td>
+                                </tr>
+                                <tr class="border-b border-gray-100">
+                                    <td class="p-6 font-bold">Deployment Speed</td>
+                                    <td class="p-6">Weeks/Months</td>
+                                    <td class="p-6">Fast (Wrapper)</td>
+                                    <td
+                                        class="p-6 bg-goofre/5 border-l-4 border-goofre text-goofre font-semibold italic">
+                                        Instant (One-Way Sync)</td>
+                                </tr>
+                                <tr class="border-b border-gray-100">
+                                    <td class="p-6 font-bold">Key Signals</td>
+                                    <td class="p-6">Analytics </td>
+                                    <td class="p-6">Human Prompts</td>
+                                    <td
+                                        class="p-6 bg-goofre/5 border-l-4 border-goofre text-goofre font-semibold italic">
+                                        UCP-Authored Intent</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Business Model -->
+            <div class="slide" id="slide-6">
+                <div
+                    class="slide-content p-12 flex flex-col justify-center items-center text-center bg-[#F8F9FA] wavy-bg">
+                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-12">SaaS Scalability
+                        meets Open Source Distribution</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl">
+                        <div
+                            class="p-10 bg-white rounded-3xl text-left border border-gray-100 hover:shadow-2xl transition-all">
+                            <h3 class="font-bold text-lg text-goofre mb-4">B2B (The Developer Engine)</h3>
+                            <ul class="space-y-4 text-sm text-gray-600">
+                                <li class="flex gap-2"><span>•</span> <span>Goofre OS (Open Source): Free core framework
+                                        to drive massive developer adoption.</span></li>
+                                <li class="flex gap-2"><span>•</span> <span>Enterprise OS: Paid, subscription-based
+                                        premium API tier.</span></li>
+                            </ul>
+                        </div>
+                        <div
+                            class="p-10 bg-white rounded-3xl text-left border border-goofre/20 hover:shadow-2xl transition-all relative">
+                            <div
+                                class="absolute top-4 right-8 text-[10px] text-goofre font-bold bg-goofre-accent px-2 py-0.5 rounded-full uppercase italic">
+                                Main Driver</div>
+                            <h3 class="font-bold text-lg text-goofre mb-4">B2C (The Merchant Interface)</h3>
+                            <ul class="space-y-4 text-sm text-gray-600">
+                                <li class="flex gap-2"><span>•</span> <span>Goofre App (SaaS): Lightweight, monthly
+                                        subscription web app. Sold directly or white-labeled via our developer
+                                        network.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Flywheel -->
+            <div class="slide" id="slide-7">
+                <div class="slide-content p-12 flex flex-col items-center justify-center text-center">
+                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-16">The “Orchestrator”
+                        Flywheel</h2>
+                    <div class="relative w-96 h-96 flex items-center justify-center">
+                        <div
+                            class="absolute inset-0 border-4 border-dashed border-goofre/10 rounded-full animate-[spin_60s_linear_infinite]">
+                        </div>
+                        <div class="relative z-10 space-y-4">
+                            <div
+                                class="w-32 h-32 bg-goofre rounded-full flex items-center justify-center text-white shadow-2xl relative">
+                                <div
+                                    class="absolute -top-12 left-1/2 -translate-x-1/2 text-xs font-bold text-goofre bg-goofre-accent px-4 py-1.5 rounded-full whitespace-nowrap">
+                                    Phase 1: Build</div>
+                                <span class="font-bold">Onboard Builders</span>
+                            </div>
+                            <div class="flex gap-8">
+                                <div
+                                    class="w-28 h-28 bg-white border-2 border-goofre rounded-full flex items-center justify-center text-goofre text-xs font-bold text-center p-2 relative">
+                                    <div
+                                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full whitespace-nowrap uppercase">
+                                        Phase 2: Verify</div>
+                                    ACO™ Certification
+                                </div>
+                                <div
+                                    class="w-28 h-28 bg-white border-2 border-goofre rounded-full flex items-center justify-center text-goofre text-xs font-bold text-center p-2 relative">
+                                    <div
+                                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full whitespace-nowrap uppercase">
+                                        Phase 3: Scale</div>
+                                    Multiply Client Base
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Partnership -->
+            <div class="slide" id="slide-8">
+                <div class="slide-content p-12 bg-goofre relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-full wavy-bg opacity-10"></div>
+                    <div class="relative z-10 flex flex-col md:flex-row items-center gap-16 h-full">
+                        <div class="md:w-1/2 text-white">
+                            <h2 class="font-display font-black text-3xl md:text-5xl mb-6">Partnering with SPUR Venture
+                                Studio</h2>
+                            <p class="text-white/80 leading-relaxed text-sm mb-8 italic">"I am bootstrapping this
+                                ecosystem out of Cambridge. We have the code, the framework, and the grit. My aim is to
+                                orchestrator with ai and build a community driven team to grow it. To scale to the
+                                Google ecosystem, we need:"</p>
+                        </div>
+                        <div class="md:w-1/2 grid grid-cols-1 gap-4">
+                            <div class="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 text-white">
+                                <div class="text-xs font-mono mb-2">1. Mentorship</div>
+                                <div class="text-sm">Strategic Mentorship to refine B2B/B2C SaaS pricing models.</div>
+                            </div>
+                            <div class="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 text-white">
+                                <div class="text-xs font-mono mb-2">2. Funding</div>
+                                <div class="text-sm">Growth Funding: To launch the ACO developer certification program
+                                    by Q2 2026.</div>
+                            </div>
+                            <div class="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 text-white">
+                                <div class="text-xs font-mono mb-2">3. Acceleration</div>
+                                <div class="text-sm">Google Acceleration: Cloud credits, API token credits for the
+                                    reasoning layer, and SPUR’s network to reach Google’s UCP product teams.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Conclusion -->
+            <div class="slide" id="slide-9">
+                <div class="slide-content p-8 flex items-center justify-center text-center">
+                    <div class="max-w-xl">
+                        <h2 class="font-display font-black text-4xl md:text-7xl text-goofre mb-12 leading-tight">Let's
+                            build the future of Canadian retail.</h2>
+                        <div class="space-y-4 pt-8 border-t border-gray-100">
+                            <div class="font-bold text-2xl text-gray-900">Vivek Sai</div>
+                            <div class="text-gray-500">
+                                <a href="https://viveksai.co/" class="hover:text-goofre transition-colors">Website:
+                                    https://viveksai.co/</a>
+                            </div>
+                            <div class="text-gray-500">
+                                <a href="https://www.linkedin.com/in/viveksai"
+                                    class="hover:text-goofre transition-colors">LinkedIn:
+                                    https://www.linkedin.com/in/viveksai</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Scroll Navigation Helper -->
+        <button id="prevBtn"
+            class="absolute left-10 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white shadow-xl flex items-center justify-center text-goofre opacity-0 hover:opacity-100 transition-opacity z-50">
+            <i data-lucide="chevron-left"></i>
+        </button>
+        <button id="nextBtn"
+            class="absolute right-10 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white shadow-xl flex items-center justify-center text-goofre opacity-50 hover:opacity-100 transition-opacity z-50">
+            <i data-lucide="chevron-right"></i>
+        </button>
     </main>
 
+    <!-- Footer -->
+    <footer
+        class="h-12 flex items-center justify-between px-8 bg-white border-t border-gray-100 text-[10px] font-mono tracking-widest uppercase text-gray-400">
+        <div>Goofre™ | pitch_deck_2026</div>
+        <div class="flex gap-6">
+            <a href="https://viveksai.co/" target="_blank" class="hover:text-goofre transition-colors">viveksai.co</a>
+            <a href="https://www.linkedin.com/in/viveksai" target="_blank"
+                class="hover:text-goofre transition-colors">LinkedIn</a>
+        </div>
+        <div id="slide-count">Slide 1 / 9</div>
+    </footer>
+
     <script>
-        // --- 1. The Content Payload ---
-        const tabsData = [
-            {
-                id: 1,
-                title: "What is Goofre OS?",
-                h2: "The Open-Source Core for Agentic Commerce",
-                body: `
-                    <p class="text-xl leading-relaxed text-bodytext/90">Goofre OS is the foundational infrastructure for the world's first <strong class="text-white font-semibold">Agentic Commerce Orchestrator (ACO)™</strong>.</p>
-                    <p class="text-bodytext/80">It is built to replace rigid legacy integrations with intelligent, event-driven orchestration.</p>
-                `
-            },
-            {
-                id: 2,
-                title: "What is Agentic Commerce?",
-                h2: "The End of the Passive Storefront",
-                body: `
-                    <p>The traditional digital storefront is dying. E-commerce is transitioning into a conversational model where transactions happen natively inside AI agents like <span class="text-googleblue font-mono text-[15px] px-1.5 py-0.5 bg-googleblue/10 rounded">Gemini</span>, <span class="text-white font-mono text-[15px] px-1.5 py-0.5 bg-white/10 rounded">ChatGPT</span>, and Voice.</p>
-                    <p>Shopping is no longer about browsing catalogs; it's about dynamic, intent-driven conversations.</p>
-                `
-            },
-            {
-                id: 3,
-                title: "Is it really happening?",
-                h2: "The Data Cannot Be Ignored",
-                body: `
-                    <p class="text-muted mb-8 font-mono text-sm tracking-wide">The shift is aggressive and accelerating:</p>
-                    <ul class="space-y-6">
-                        <li class="flex items-start gap-5">
-                            <div class="mt-1 p-2 bg-googlegreen/10 rounded-md border border-googlegreen/20"><i data-lucide="trending-up" class="w-5 h-5 text-googlegreen flex-shrink-0"></i></div>
-                            <div>
-                                <strong class="text-white block text-xl md:text-2xl font-bold tracking-tight mb-1">$290 Billion</strong>
-                                <span class="text-bodytext text-base">Projected value of conversational commerce by 2025.</span>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-5">
-                            <div class="mt-1 p-2 bg-googlegreen/10 rounded-md border border-googlegreen/20"><i data-lucide="zap" class="w-5 h-5 text-googlegreen flex-shrink-0"></i></div>
-                            <div>
-                                <strong class="text-white block text-xl md:text-2xl font-bold tracking-tight mb-1">4,700% Growth</strong>
-                                <span class="text-bodytext text-base">YoY increase in AI-driven traffic to retail sites.</span>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-5">
-                            <div class="mt-1 p-2 bg-googlegreen/10 rounded-md border border-googlegreen/20"><i data-lucide="bot" class="w-5 h-5 text-googlegreen flex-shrink-0"></i></div>
-                            <div>
-                                <strong class="text-white block text-xl md:text-2xl font-bold tracking-tight mb-1">85% of Interactions</strong>
-                                <span class="text-bodytext text-base">Will be handled by AI by the end of the year.</span>
-                            </div>
-                        </li>
-                    </ul>
-                `
-            },
-            {
-                id: 4,
-                title: "Platform Evolution",
-                h2: "Platforms are Automating You Away",
-                body: `
-                    <p>Legacy and AI-native e-commerce platforms are rapidly building AI directly into their core to automate store building and optimization.</p>
-                    <p>Merchants can now deploy apps with simple text prompts. As a result, platform partner programs and agency teams are being aggressively downsized.</p>
-                `
-            },
-            {
-                id: 5,
-                title: "What is UCP?",
-                h2: "The Universal Commerce Protocol",
-                body: `
-                    <p>UCP is the framework dictating how automated shopping operates. It is led by Google's massive consumer moat (<span class="text-googleblue font-medium">Search, Chrome, Gemini</span>) and backed by mammoth business engines (<span class="text-googlegreen font-medium">GMC, Analytics, Ads</span>).</p>
-                    <p>However, the Google stack is complex, multi-featured, and highly siloed.</p>
-                `
-            },
-            {
-                id: 6,
-                title: "🚨 Dev Reality Check",
-                h2: "Your Role is Obsolete (If You Don't Adapt)",
-                isAlert: true,
-                body: `
-                    <div class="border-l-[3px] border-googlered pl-4 py-4 my-8 bg-googlered/5 rounded-r-lg md:pl-6">
-                        <p class="text-bodytext/90 mb-6 text-[15px] md:text-[17px]">Store designing is now being done directly by merchants using AI-generation tools like <span class="font-mono text-white text-[14px] md:text-[15px]">Lovable</span> and <span class="font-mono text-white text-[14px] md:text-[15px]">Replit</span>. Store building and day-to-day management are being entirely automated.</p>
-                        <p class="text-googlered font-bold text-lg md:text-[22px] tracking-tight leading-snug"><i data-lucide="triangle-alert" class="w-5 h-5 md:w-6 md:h-6 inline-block -mt-1 mr-2"></i>If platforms are autonomous and storefronts are chat windows, what is your job?</p>
-                    </div>
-                `
-            },
-            {
-                id: 7,
-                title: "The Solution",
-                h2: "Become an Agentic Commerce Orchestrator™",
-                body: `
-                    <p>You are no longer a store builder; you are the critical <strong class="text-white bg-white/10 px-2 py-0.5 rounded">human-in-the-loop</strong>.</p>
-                    <p>Goofre OS is the open-source brain and nervous system that seamlessly connects Google Merchant Center (GMC) with the rest of Google's commerce-centric stack, dramatically accelerating UCP adoption for your clients without vendor lock-in.</p>
-                `
-            },
-            {
-                id: 8,
-                title: "How it Works",
-                h2: "Deploy. Monitor. Orchestrate.",
-                body: `
-                    <div class="mb-10">
-                        <ol class="space-y-4 list-decimal list-inside text-bodytext font-mono text-[15px] bg-[#161618] p-8 rounded-xl border border-bordercolor shadow-inner">
-                            <li class="pl-2"><strong class="text-white">Fork</strong> the Goofre OS repo.</li>
-                            <li class="pl-2"><strong class="text-white">Connect</strong> your merchant's Google keys.</li>
-                            <li class="pl-2"><strong class="text-white">Webhook</strong> the legacy site (one-way sync).</li>
-                            <li class="pl-2"><strong class="text-white">Sync</strong> physical PoS.</li>
-                        </ol>
-                    </div>
-                `
-            }
-        ];
+        const slider = document.getElementById('slider');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const slideCountDisplay = document.getElementById('slide-count');
+        const totalSlides = 9;
 
-        // --- 2. State & DOM Nodes ---
-        let activeTabId = 1;
-        const tabsContainer = document.getElementById('tabs-container');
-        const contentContainer = document.getElementById('content-container');
-        const breadcrumbText = document.getElementById('breadcrumb-text');
+        // Update nav visibility and count
+        const updateUI = () => {
+            const index = Math.round(slider.scrollLeft / window.innerWidth) + 1;
+            slideCountDisplay.innerText = `Slide ${index} / ${totalSlides}`;
+            prevBtn.style.opacity = index === 1 ? '0' : '0.5';
+            nextBtn.style.opacity = index === totalSlides ? '0' : '0.5';
+        };
 
-        // --- 3. Render Functions ---
-        function renderTabs() {
-            const scrollContainer = tabsContainer.parentElement;
-            const currentScroll = scrollContainer.scrollLeft;
+        nextBtn.onclick = () => {
+            slider.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+        };
 
-            tabsContainer.innerHTML = '';
-            let activeBtn = null;
+        prevBtn.onclick = () => {
+            slider.scrollBy({ left: -window.innerWidth, behavior: 'smooth' });
+        };
 
-            tabsData.forEach(tab => {
-                const btn = document.createElement('button');
-                const isActive = tab.id === activeTabId;
-                if (isActive) activeBtn = btn;
+        slider.onscroll = () => {
+            clearTimeout(window.scrollTimeout);
+            window.scrollTimeout = setTimeout(updateUI, 100);
+        };
 
-                // Base classes
-                let classes = "tab-button !flex w-auto md:w-full flex-shrink-0 text-left px-3 py-2 md:px-5 md:py-4 rounded-md md:rounded-lg font-medium text-[13px] md:text-[15px] items-center justify-center md:justify-between group outline-none focus:outline-none border-b-2 md:border-b-0 md:border-l-2 border-transparent ";
-
-                if (isActive) {
-                    if (tab.isAlert) {
-                        classes += "active-alert bg-zinc-800/60 md:bg-zinc-800 text-white shadow-none md:shadow-sm !border-googlered md:!border-l-googlered md:!border-b-transparent";
-                    } else {
-                        classes += "active bg-zinc-800/60 md:bg-zinc-800 text-white shadow-none md:shadow-sm !border-goofre md:!border-l-goofre md:!border-b-transparent";
-                    }
-                } else {
-                    if (tab.isAlert) {
-                        classes += "text-googlered/60 hover:bg-zinc-800/30 hover:text-googlered";
-                    } else {
-                        classes += "text-muted hover:bg-zinc-800/30 hover:text-bodytext";
-                    }
-                }
-
-                btn.className = classes;
-                btn.innerHTML = `
-                    <span class="tracking-wide flex items-center gap-2 md:gap-3 whitespace-nowrap">
-                        ${tab.isAlert && isActive ? '<i data-lucide="triangle-alert" class="w-4 h-4 text-googlered"></i>' : ''}
-                        ${!tab.isAlert && isActive ? '<i data-lucide="terminal-square" class="w-4 h-4 text-goofre"></i>' : ''}
-                        ${tab.title}
-                    </span>
-                    <i data-lucide="chevron-right" class="hidden md:block w-4 h-4 opacity-${isActive ? '100' : '0'} group-hover:opacity-100 transition-opacity ${isActive ? (tab.isAlert ? 'text-googlered' : 'text-goofre') : 'text-muted/50'}"></i>
-                `;
-
-                btn.onclick = () => {
-                    if (activeTabId !== tab.id) {
-                        activeTabId = tab.id;
-                        updateUI();
-                    }
-                };
-
-                tabsContainer.appendChild(btn);
-            });
-
-            // Re-initialize icons for newly injected DOM
-            lucide.createIcons();
-
-            // Restore scroll position to prevent snapping to left
-            scrollContainer.scrollLeft = currentScroll;
-
-            // Auto-scroll to center the active tab completely in view
-            if (activeBtn) {
-                setTimeout(() => {
-                    activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                }, 10);
-            }
-        }
-
-        function renderContent() {
-            const tab = tabsData.find(t => t.id === activeTabId);
-            if (!tab) return;
-
-            // Trigger Fade Out
-            contentContainer.classList.remove('opacity-100');
-            contentContainer.classList.add('opacity-0');
-
-            // Update Breadcrumb instantly
-            breadcrumbText.innerText = `Tab 0${tab.id}`;
-
-            if (tab.isAlert) {
-                breadcrumbText.classList.add('text-googlered');
-                breadcrumbText.classList.remove('text-muted');
-            } else {
-                breadcrumbText.classList.add('text-muted');
-                breadcrumbText.classList.remove('text-googlered');
-            }
-
-            // Wait for fade out to complete before swapping content
-            setTimeout(() => {
-                let h2ColorClass = tab.isAlert ? "text-googlered" : "text-white";
-
-                contentContainer.innerHTML = `
-                    <h2 class="${h2ColorClass}">${tab.h2}</h2>
-                    ${tab.body}
-                `;
-
-                lucide.createIcons();
-
-                // Trigger Fade In
-                requestAnimationFrame(() => {
-                    contentContainer.classList.remove('opacity-0');
-                    contentContainer.classList.add('opacity-100');
-                });
-
-            }, 300); // 300ms matches the CSS transition duration
-        }
-
-        function updateUI() {
-            renderTabs();
-            renderContent();
-        }
-
-        // --- 4. Initialization ---
-        document.addEventListener('DOMContentLoaded', () => {
-            updateUI();
-        });
+        // Initialize Icons
+        lucide.createIcons();
+        window.addEventListener('resize', updateUI);
     </script>
 </body>
 
