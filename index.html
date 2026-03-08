@@ -73,14 +73,15 @@
             justify-content: center;
             align-items: center;
             scroll-snap-align: center;
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .slide-content {
             width: 100%;
             max-width: 1500px;
             height: auto;
-            max-height: 90%;
+            min-height: min-content;
+            max-height: 92%;
             background: white;
             border-radius: 2rem;
             box-shadow: 0 15px 50px -10px rgba(95, 49, 146, 0.1);
@@ -92,8 +93,9 @@
             border: 1px solid rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
+            justify-content: safe center;
             /* Adaptive aspect ratio: wide on desktop, flexible on mobile */
-            padding: 4rem 3rem;
+            padding: 2.5rem 2rem;
         }
 
         .slide-content::-webkit-scrollbar {
@@ -102,9 +104,13 @@
 
         @media (min-width: 1024px) {
             .slide-content {
-                min-height: 400px;
-                /* Force the cinematic look */
+                padding: 4rem 5rem;
             }
+        }
+
+        /* Ensure specific slide elements are compact */
+        #slide-3 .space-y-3>* {
+            flex-shrink: 1;
         }
 
         /* Abstract branding elements */
