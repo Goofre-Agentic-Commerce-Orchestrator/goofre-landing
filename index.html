@@ -61,8 +61,8 @@
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
-            height: calc(100vh - 120px);
-            /* Adjust for header and footer */
+            height: calc(100vh - 48px);
+            /* Full height minus thin footer */
             align-items: center;
         }
 
@@ -73,27 +73,32 @@
             justify-content: center;
             align-items: center;
             scroll-snap-align: center;
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .slide-content {
             width: 100%;
-            max-width: 1400px;
-            /* Constrain wide slides */
+            height: auto;
+            max-width: 1500px;
+            max-height: 85%;
+            /* Prevent vertical overflow */
             background: white;
             border-radius: 1.5rem;
-            box-shadow: 0 10px 40px -10px rgba(95, 49, 146, 0.1);
+            box-shadow: 0 8px 30px rgba(95, 49, 146, 0.08);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            /* Aspect ratio logic */
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* Flexing the aspect ratio to fit available space */
             aspect-ratio: 16/9;
-            /* Fallback */
         }
 
-        @media (min-width: 1024px) {
+        @media (min-width: 1200px) {
             .slide-content {
-                aspect-ratio: 16/4;
+                aspect-ratio: 16/4.5;
+                /* Slightly taller than 16:4 to avoid chopping */
             }
         }
 
@@ -102,7 +107,7 @@
             position: absolute;
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(95, 49, 146, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(95, 49, 146, 0.08) 0%, transparent 70%);
             border-radius: 50%;
             z-index: 0;
         }
@@ -121,41 +126,23 @@
 
 <body class="h-screen w-screen selection:bg-goofre selection:text-white flex flex-col">
 
-    <!-- Header Navigation -->
-    <header class="h-16 flex items-center justify-between px-8 bg-white border-b border-gray-100 z-50">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-goofre rounded-lg flex items-center justify-center">
-                <span class="text-white font-black text-lg">G</span>
-            </div>
-            <span class="font-display font-extrabold text-xl tracking-tight text-goofre">Goofre™</span>
-        </div>
-        <nav class="flex gap-4">
-            <a href="/os"
-                class="px-5 py-2 rounded-full border border-goofre/20 text-goofre font-medium text-sm hover:bg-goofre-accent transition-all duration-300">/os
-                Docs</a>
-            <a href="/app"
-                class="px-5 py-2 rounded-full bg-goofre text-white font-medium text-sm hover:shadow-lg hover:shadow-goofre/20 transition-all duration-300">/app
-                PWA</a>
-        </nav>
-    </header>
-
-    <!-- Slide Carousel -->
+    <!-- Slide Carousel: Takes full space from top -->
     <main class="flex-1 relative">
         <div id="slider" class="slide-container no-scrollbar">
 
             <!-- Slide 1: Hero -->
             <div class="slide" id="slide-1">
-                <div class="slide-content p-12 md:p-20 flex flex-col justify-center items-center text-center relative">
+                <div class="slide-content p-8 md:p-12 text-center relative">
                     <div class="glow -top-20 -right-20"></div>
                     <div class="glow -bottom-20 -left-20"></div>
-                    <h1 class="font-display font-extrabold text-7xl md:text-9xl text-goofre mb-4 tracking-tighter">
+                    <h1 class="font-display font-extrabold text-6xl md:text-8xl text-goofre mb-4 tracking-tighter">
                         Goofre™</h1>
-                    <p class="text-xl md:text-3xl font-medium text-gray-500 max-w-2xl px-4">Empowering Canada’s SMBs to
-                        become agentic Commerce ready by adopting Google’s UCP.</p>
-                    <p class="mt-8 font-mono text-xs text-gray-400 tracking-widest uppercase">Pronunciation Guide:
+                    <p class="text-lg md:text-2xl font-medium text-gray-500 max-w-2xl mx-auto px-4">Empowering Canada’s
+                        SMBs to become agentic Commerce ready by adopting Google’s UCP.</p>
+                    <p class="mt-6 font-mono text-[10px] text-gray-400 tracking-widest uppercase">Pronunciation Guide:
                         /gu:.fri:/ (Go Free)</p>
-                    <div class="absolute bottom-0 right-0 p-8 opacity-20">
-                        <svg width="200" height="200" viewBox="0 0 200 200" class="text-goofre">
+                    <div class="absolute bottom-0 right-0 p-8 opacity-10">
+                        <svg width="150" height="150" viewBox="0 0 200 200" class="text-goofre">
                             <path d="M0 100 Q 50 50 100 100 T 200 100" fill="none" stroke="currentColor"
                                 stroke-width="2" />
                             <path d="M0 110 Q 50 60 100 110 T 200 110" fill="none" stroke="currentColor"
@@ -169,28 +156,25 @@
 
             <!-- Slide 2: The Problem -->
             <div class="slide" id="slide-2">
-                <div class="slide-content p-12 bg-[#F4F1F8] relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-white/50 rounded-full -mr-32 -mt-32 blur-3xl"></div>
-                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-12">The Agentic Era is
-                        Leaving SMBs and Developers Behind</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-                        <div class="glass-card p-8 rounded-2xl">
-                            <h3 class="font-bold text-xl text-goofre mb-4">The SMB Crisis</h3>
-                            <p class="text-gray-600 leading-relaxed text-sm">Agentic commerce (one-click purchasing) is
-                                the new standard, but Canadian SMBs are locked out. They lack the tech stack to navigate
-                                the complex Google commerce centric stack.</p>
+                <div class="slide-content p-8 md:p-10 bg-[#F4F1F8] relative">
+                    <h2 class="font-display font-extrabold text-2xl md:text-4xl text-goofre mb-8 text-center">The
+                        Agentic Era is Leaving SMBs Behind</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+                        <div class="glass-card p-6 rounded-xl">
+                            <h3 class="font-bold text-lg text-goofre mb-3">SMB Crisis</h3>
+                            <p class="text-gray-600 leading-relaxed text-xs">Agentic commerce is the new standard, but
+                                Canadian SMBs are locked out. They lack the tech stack to navigate Google's commerce
+                                ecosystem.</p>
                         </div>
-                        <div class="glass-card p-8 rounded-2xl border-goofre/20 bg-white shadow-xl">
-                            <h3 class="font-bold text-xl text-goofre mb-4">The Protocol Bottleneck</h3>
-                            <p class="text-gray-600 leading-relaxed text-sm">Google’s Universal Commerce Protocol (UCP)
-                                is the best framework, but it is siloed and too heavy for a local merchant to deploy.
-                            </p>
+                        <div class="glass-card p-6 rounded-xl border-goofre/20 bg-white shadow-lg">
+                            <h3 class="font-bold text-lg text-goofre mb-3">Protocol Bottleneck</h3>
+                            <p class="text-gray-600 leading-relaxed text-xs">Google’s UCP is the best framework, but it
+                                is siloed and too heavy for a local merchant to deploy independently.</p>
                         </div>
-                        <div class="glass-card p-8 rounded-2xl">
-                            <h3 class="font-bold text-xl text-goofre mb-4">The Developer Dilemma</h3>
-                            <h3 class="text-gray-600 leading-relaxed text-sm">As legacy e-commerce platforms automate,
-                                thousands of freelance ecom-developers are watching their traditional skill sets (store
-                                design) evaporate.</h3>
+                        <div class="glass-card p-6 rounded-xl">
+                            <h3 class="font-bold text-lg text-goofre mb-3">Developer Dilemma</h3>
+                            <p class="text-gray-600 leading-relaxed text-xs">As legacy platforms automate, freelance
+                                developers are watching their traditional store design skill sets evaporate.</p>
                         </div>
                     </div>
                 </div>
@@ -198,39 +182,28 @@
 
             <!-- Slide 3: Ecosystem -->
             <div class="slide" id="slide-3">
-                <div class="slide-content p-12 flex flex-col items-center justify-center text-center">
-                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-4">The Goofre
+                <div class="slide-content p-8 md:p-10 flex flex-col items-center justify-center text-center">
+                    <h2 class="font-display font-extrabold text-2xl md:text-4xl text-goofre mb-6">The Goofre
                         Orchestration Ecosystem</h2>
-                    <p class="text-gray-500 mb-12">A three-tier architecture turning complexity into voice-activated
-                        simplicity.</p>
-
-                    <div class="w-full max-w-4xl space-y-4">
-                        <div class="p-6 bg-[#212529] text-white rounded-xl shadow-lg border-b-4 border-goofre">
-                            <div class="font-bold text-lg mb-1">1. The Engine (Goofre OS)</div>
-                            <div class="text-xs text-gray-400 font-mono">Open-source middleware translating the heavy
-                                Google UCP stack (GMC, Analytics, Search Console, Ads).</div>
+                    <div class="w-full max-w-3xl space-y-3">
+                        <div class="p-4 bg-[#212529] text-white rounded-lg shadow-md border-b-2 border-goofre">
+                            <div class="font-bold text-base mb-0.5">1. The Engine (Goofre OS)</div>
+                            <div class="text-[10px] text-gray-400 font-mono">Open-source middleware translates Google
+                                UCP stack (GMC, GA4, GSC, Ads).</div>
                         </div>
-                        <div class="relative py-2">
-                            <div class="absolute inset-0 flex items-center justify-center opacity-30"><i
-                                    data-lucide="arrow-down" class="text-goofre"></i></div>
+                        <div class="flex items-center justify-center py-1 opacity-20"><i data-lucide="arrow-down"
+                                class="text-goofre w-4 h-4"></i></div>
+                        <div class="p-6 bg-goofre/5 border-2 border-goofre rounded-xl relative">
+                            <div class="font-bold text-lg text-goofre mb-1">2. The Interface (Goofre App)</div>
+                            <div class="text-xs text-gray-700">A voice-activated "Bento" Command Center for deep AI
+                                insights.</div>
                         </div>
-                        <div
-                            class="p-8 bg-goofre/5 border-2 border-goofre rounded-2xl shadow-[0_0_30px_rgba(95,49,146,0.15)] relative">
-                            <div class="absolute -inset-1 bg-goofre/10 blur-xl rounded-2xl -z-10"></div>
-                            <div class="font-bold text-xl text-goofre mb-2">2. The Interface (Goofre App) <span
-                                    class="text-[10px] bg-goofre text-white px-2 py-0.5 rounded-full ml-2">Hack Canada
-                                    2026 Build</span></div>
-                            <div class="text-sm text-gray-700">A voice-activated "Bento" Command Center. Distills deep
-                                AI insights into a 4-quadrant interface.</div>
-                        </div>
-                        <div class="relative py-2">
-                            <div class="absolute inset-0 flex items-center justify-center opacity-30"><i
-                                    data-lucide="arrow-down" class="text-gray-400"></i></div>
-                        </div>
-                        <div class="p-6 bg-white border border-gray-100 rounded-xl">
-                            <div class="font-bold text-lg text-gray-800 mb-1">3. The Orchestrator</div>
-                            <div class="text-xs text-gray-500">Empowering displaced developers to manage the Goofre OS
-                                for merchants, turning them into essential AI operators.</div>
+                        <div class="flex items-center justify-center py-1 opacity-20"><i data-lucide="arrow-down"
+                                class="text-gray-400 w-4 h-4"></i></div>
+                        <div class="p-4 bg-white border border-gray-100 rounded-lg">
+                            <div class="font-bold text-base text-gray-800 mb-0.5">3. The Orchestrator</div>
+                            <div class="text-[10px] text-gray-500">Empowering developers to managed Goofre OS, turning
+                                them into AI operators.</div>
                         </div>
                     </div>
                 </div>
@@ -238,55 +211,36 @@
 
             <!-- Slide 4: GTM -->
             <div class="slide" id="slide-4">
-                <div class="slide-content p-12 md:p-20 relative bg-white">
-                    <div class="absolute top-0 right-0 p-12 opacity-5"><i data-lucide="map"
-                            class="w-64 h-64 text-goofre"></i></div>
-                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-16">A Dual-Sided
-                        Go-To-Market Opportunity</h2>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 relative z-10">
-                        <div class="space-y-6">
-                            <div class="text-xs font-mono tracking-widest text-[#666] uppercase">B2C: The Canadian SMB
-                                Retailer</div>
-                            <ul class="space-y-8">
-                                <li class="flex items-center gap-4">
+                <div class="slide-content p-8 md:p-12 relative bg-white">
+                    <h2 class="font-display font-extrabold text-2xl md:text-4xl text-goofre mb-10">Go-To-Market
+                        Opportunity</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                        <div class="space-y-4">
+                            <div class="text-[10px] font-mono tracking-widest text-gray-400 uppercase">B2C: Retailers
+                            </div>
+                            <ul class="space-y-4">
+                                <li class="flex items-center gap-3">
                                     <div
-                                        class="w-12 h-12 rounded-full bg-goofre/10 flex items-center justify-center text-goofre font-bold">
+                                        class="w-10 h-10 rounded-full bg-goofre/10 flex items-center justify-center text-goofre font-bold text-xs text-center leading-none">
                                         TAM</div>
-                                    <div><span class="block text-2xl font-bold">~150,000+</span> <span
-                                            class="text-sm text-gray-500">retail SMBs in Canada.</span></div>
+                                    <div><span class="block text-xl font-bold">150k+</span> <span
+                                            class="text-[10px] text-gray-500">retailers in Canada.</span></div>
                                 </li>
-                                <li class="flex items-center gap-4">
+                                <li class="flex items-center gap-3">
                                     <div
-                                        class="w-12 h-12 rounded-full bg-goofre/10 flex items-center justify-center text-goofre font-bold">
-                                        SAM</div>
-                                    <div><span class="block text-2xl font-bold">~45,000</span> <span
-                                            class="text-sm text-gray-500">tech-forward SMBs.</span></div>
-                                </li>
-                                <li class="flex items-center gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-goofre flex items-center justify-center text-white font-bold">
+                                        class="w-10 h-10 rounded-full bg-goofre flex items-center justify-center text-white font-bold text-xs text-center leading-none">
                                         SOM</div>
-                                    <div><span class="block text-4xl font-black text-goofre">3,000</span> <span
-                                            class="text-sm text-gray-500">local merchants for initial rollout.</span>
-                                    </div>
+                                    <div><span class="block text-2xl font-black text-goofre">3,000</span> <span
+                                            class="text-[10px] text-gray-500">merchants for rollout.</span></div>
                                 </li>
                             </ul>
                         </div>
-                        <div class="space-y-6 p-10 bg-gray-50 rounded-3xl border border-gray-100">
-                            <div class="text-xs font-mono tracking-widest text-[#666] uppercase">B2B: The Developer
-                                Ecosystem</div>
-                            <div class="space-y-4">
-                                <p class="text-gray-600">TAM: ~25,000 freelance/agency web developers in Canada.</p>
-                                <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                                    <div class="h-full bg-goofre w-[15%]"></div>
-                                </div>
-                                <div class="pt-8">
-                                    <span class="text-sm text-gray-500 uppercase tracking-widest">Target:</span>
-                                    <div class="text-6xl font-black text-goofre mt-2">300</div>
-                                    <p class="text-gray-600 mt-2">Canadian developers to onboard by June 2026.</p>
-                                </div>
-                            </div>
+                        <div class="p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                            <div class="text-[10px] font-mono tracking-widest text-gray-400 uppercase mb-4">B2B:
+                                Developers</div>
+                            <div class="text-4xl font-black text-goofre">300</div>
+                            <p class="text-xs text-gray-600 mt-2">Targeting 300 certified Canadian builders by June
+                                2026.</p>
                         </div>
                     </div>
                 </div>
@@ -294,44 +248,32 @@
 
             <!-- Slide 5: Competitors -->
             <div class="slide" id="slide-5">
-                <div class="slide-content p-12 bg-gray-50 flex flex-col">
-                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-12 text-center">
+                <div class="slide-content p-8 bg-gray-50 flex flex-col justify-center">
+                    <h2 class="font-display font-extrabold text-2xl md:text-4xl text-goofre mb-8 text-center">
                         Competitive Advantage</h2>
-                    <div class="flex-1 overflow-x-auto">
-                        <table class="w-full text-left border-collapse bg-white rounded-2xl overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse bg-white rounded-xl overflow-hidden shadow-sm">
                             <thead>
-                                <tr class="bg-goofre text-white">
-                                    <th class="p-6">Feature</th>
-                                    <th class="p-6">Legacy Stack (Shopify/Magento)</th>
-                                    <th class="p-6">AI Native (OpenAI/Claude)</th>
-                                    <th class="p-6 bg-white text-goofre border-l-4 border-goofre">The Goofre Difference
-                                    </th>
+                                <tr class="bg-goofre text-white text-xs">
+                                    <th class="p-4">Feature</th>
+                                    <th class="p-4">Legacy Stack</th>
+                                    <th class="p-4 bg-white text-goofre border-l-4 border-goofre">Goofre Difference</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-sm text-gray-600">
-                                <tr class="border-b border-gray-100">
-                                    <td class="p-6 font-bold">Commerce Source</td>
-                                    <td class="p-6">Passive Web Storefront</td>
-                                    <td class="p-6">General Reasoning</td>
+                            <tbody class="text-[10px] md:text-xs text-gray-600">
+                                <tr class="border-b border-gray-50">
+                                    <td class="p-4 font-bold">Commerce Source</td>
+                                    <td class="p-4">Passive Storefront</td>
                                     <td
-                                        class="p-6 bg-goofre/5 border-l-4 border-goofre text-goofre font-semibold italic">
+                                        class="p-4 bg-goofre/5 border-l-4 border-goofre text-goofre font-semibold italic text-xs">
                                         Native UCP Connection</td>
                                 </tr>
-                                <tr class="border-b border-gray-100">
-                                    <td class="p-6 font-bold">Deployment Speed</td>
-                                    <td class="p-6">Weeks/Months</td>
-                                    <td class="p-6">Fast (Wrapper)</td>
+                                <tr class="border-b border-gray-50">
+                                    <td class="p-4 font-bold">Deployment</td>
+                                    <td class="p-4">Weeks/Months</td>
                                     <td
-                                        class="p-6 bg-goofre/5 border-l-4 border-goofre text-goofre font-semibold italic">
-                                        Instant (One-Way Sync)</td>
-                                </tr>
-                                <tr class="border-b border-gray-100">
-                                    <td class="p-6 font-bold">Key Signals</td>
-                                    <td class="p-6">Analytics </td>
-                                    <td class="p-6">Human Prompts</td>
-                                    <td
-                                        class="p-6 bg-goofre/5 border-l-4 border-goofre text-goofre font-semibold italic">
-                                        UCP-Authored Intent</td>
+                                        class="p-4 bg-goofre/5 border-l-4 border-goofre text-goofre font-semibold italic text-xs">
+                                        Instant One-Way Sync</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -341,32 +283,18 @@
 
             <!-- Slide 6: Business Model -->
             <div class="slide" id="slide-6">
-                <div
-                    class="slide-content p-12 flex flex-col justify-center items-center text-center bg-[#F8F9FA] wavy-bg">
-                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-12">SaaS Scalability
-                        meets Open Source Distribution</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl">
-                        <div
-                            class="p-10 bg-white rounded-3xl text-left border border-gray-100 hover:shadow-2xl transition-all">
-                            <h3 class="font-bold text-lg text-goofre mb-4">B2B (The Developer Engine)</h3>
-                            <ul class="space-y-4 text-sm text-gray-600">
-                                <li class="flex gap-2"><span>•</span> <span>Goofre OS (Open Source): Free core framework
-                                        to drive massive developer adoption.</span></li>
-                                <li class="flex gap-2"><span>•</span> <span>Enterprise OS: Paid, subscription-based
-                                        premium API tier.</span></li>
-                            </ul>
+                <div class="slide-content p-8 md:p-12 text-center bg-[#F8F9FA] wavy-bg">
+                    <h2 class="font-display font-extrabold text-2xl md:text-4xl text-goofre mb-10">Business Model</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mx-auto">
+                        <div class="p-6 bg-white rounded-2xl text-left border border-gray-100 shadow-sm">
+                            <h3 class="font-bold text-base text-goofre mb-3">Engine (B2B)</h3>
+                            <p class="text-[10px] text-gray-600">Goofre OS (Free) drives adoption. Enterprise OS (SaaS)
+                                offers premium API layers.</p>
                         </div>
-                        <div
-                            class="p-10 bg-white rounded-3xl text-left border border-goofre/20 hover:shadow-2xl transition-all relative">
-                            <div
-                                class="absolute top-4 right-8 text-[10px] text-goofre font-bold bg-goofre-accent px-2 py-0.5 rounded-full uppercase italic">
-                                Main Driver</div>
-                            <h3 class="font-bold text-lg text-goofre mb-4">B2C (The Merchant Interface)</h3>
-                            <ul class="space-y-4 text-sm text-gray-600">
-                                <li class="flex gap-2"><span>•</span> <span>Goofre App (SaaS): Lightweight, monthly
-                                        subscription web app. Sold directly or white-labeled via our developer
-                                        network.</span></li>
-                            </ul>
+                        <div class="p-6 bg-white rounded-2xl text-left border border-goofre/20 shadow-sm">
+                            <h3 class="font-bold text-base text-goofre mb-3">Merchant (B2C)</h3>
+                            <p class="text-[10px] text-gray-600">Goofre App (SaaS) monthly subscription for
+                                voice-activated retail intelligence.</p>
                         </div>
                     </div>
                 </div>
@@ -374,70 +302,44 @@
 
             <!-- Slide 7: Flywheel -->
             <div class="slide" id="slide-7">
-                <div class="slide-content p-12 flex flex-col items-center justify-center text-center">
-                    <h2 class="font-display font-extrabold text-3xl md:text-5xl text-goofre mb-16">The “Orchestrator”
+                <div class="slide-content p-8 flex flex-col items-center justify-center">
+                    <h2 class="font-display font-extrabold text-2xl md:text-4xl text-goofre mb-8">The "Orchestrator"
                         Flywheel</h2>
-                    <div class="relative w-96 h-96 flex items-center justify-center">
-                        <div
-                            class="absolute inset-0 border-4 border-dashed border-goofre/10 rounded-full animate-[spin_60s_linear_infinite]">
-                        </div>
-                        <div class="relative z-10 space-y-4">
+                    <div class="relative flex flex-col items-center gap-4">
+                        <div class="flex gap-4">
                             <div
-                                class="w-32 h-32 bg-goofre rounded-full flex items-center justify-center text-white shadow-2xl relative">
-                                <div
-                                    class="absolute -top-12 left-1/2 -translate-x-1/2 text-xs font-bold text-goofre bg-goofre-accent px-4 py-1.5 rounded-full whitespace-nowrap">
-                                    Phase 1: Build</div>
-                                <span class="font-bold">Onboard Builders</span>
-                            </div>
-                            <div class="flex gap-8">
-                                <div
-                                    class="w-28 h-28 bg-white border-2 border-goofre rounded-full flex items-center justify-center text-goofre text-xs font-bold text-center p-2 relative">
-                                    <div
-                                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full whitespace-nowrap uppercase">
-                                        Phase 2: Verify</div>
-                                    ACO™ Certification
-                                </div>
-                                <div
-                                    class="w-28 h-28 bg-white border-2 border-goofre rounded-full flex items-center justify-center text-goofre text-xs font-bold text-center p-2 relative">
-                                    <div
-                                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full whitespace-nowrap uppercase">
-                                        Phase 3: Scale</div>
-                                    Multiply Client Base
-                                </div>
-                            </div>
+                                class="w-24 h-24 rounded-full bg-goofre text-white flex items-center justify-center text-[10px] font-bold text-center p-2 shadow-xl">
+                                1. Onboard Builders</div>
+                            <div
+                                class="w-24 h-24 rounded-full bg-white border-2 border-goofre text-goofre flex items-center justify-center text-[10px] font-bold text-center p-2">
+                                2. ACO Verify</div>
+                            <div
+                                class="w-24 h-24 rounded-full bg-white border-2 border-goofre text-goofre flex items-center justify-center text-[10px] font-bold text-center p-2">
+                                3. Scale Clients</div>
                         </div>
+                        <div class="text-gray-400 animate-pulse"><i data-lucide="refresh-cw" class="w-6 h-6"></i></div>
                     </div>
                 </div>
             </div>
 
             <!-- Slide 8: Partnership -->
             <div class="slide" id="slide-8">
-                <div class="slide-content p-12 bg-goofre relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-full wavy-bg opacity-10"></div>
-                    <div class="relative z-10 flex flex-col md:flex-row items-center gap-16 h-full">
-                        <div class="md:w-1/2 text-white">
-                            <h2 class="font-display font-black text-3xl md:text-5xl mb-6">Partnering with SPUR Venture
-                                Studio</h2>
-                            <p class="text-white/80 leading-relaxed text-sm mb-8 italic">"I am bootstrapping this
-                                ecosystem out of Cambridge. We have the code, the framework, and the grit. My aim is to
-                                orchestrator with ai and build a community driven team to grow it. To scale to the
-                                Google ecosystem, we need:"</p>
+                <div class="slide-content p-8 md:p-12 bg-goofre text-white relative">
+                    <div class="absolute inset-0 wavy-bg opacity-10"></div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center h-full">
+                        <div>
+                            <h2 class="font-display font-black text-2xl md:text-4xl mb-4 leading-tight">Partnering with
+                                SPUR Venture Studio</h2>
+                            <p class="text-white/70 text-xs italic mb-4 max-w-md">"I am bootstrapping this ecosystem out
+                                of Cambridge. We have the code, the framework, and the grit."</p>
                         </div>
-                        <div class="md:w-1/2 grid grid-cols-1 gap-4">
-                            <div class="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 text-white">
-                                <div class="text-xs font-mono mb-2">1. Mentorship</div>
-                                <div class="text-sm">Strategic Mentorship to refine B2B/B2C SaaS pricing models.</div>
-                            </div>
-                            <div class="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 text-white">
-                                <div class="text-xs font-mono mb-2">2. Funding</div>
-                                <div class="text-sm">Growth Funding: To launch the ACO developer certification program
-                                    by Q2 2026.</div>
-                            </div>
-                            <div class="p-6 bg-white/10 backdrop-blur rounded-2xl border border-white/20 text-white">
-                                <div class="text-xs font-mono mb-2">3. Acceleration</div>
-                                <div class="text-sm">Google Acceleration: Cloud credits, API token credits for the
-                                    reasoning layer, and SPUR’s network to reach Google’s UCP product teams.</div>
-                            </div>
+                        <div class="grid grid-cols-1 gap-2">
+                            <div class="p-3 bg-white/10 backdrop-blur rounded-lg border border-white/20 text-[10px]">
+                                Mentorship: Pricing & SaaS Strategy.</div>
+                            <div class="p-3 bg-white/10 backdrop-blur rounded-lg border border-white/20 text-[10px]">
+                                Funding: Launching ACO Certification by Q2 2026.</div>
+                            <div class="p-3 bg-white/10 backdrop-blur rounded-lg border border-white/20 text-[10px]">
+                                Acceleration: Google ecosystem access & API credits.</div>
                         </div>
                     </div>
                 </div>
@@ -445,49 +347,53 @@
 
             <!-- Slide 9: Conclusion -->
             <div class="slide" id="slide-9">
-                <div class="slide-content p-8 flex items-center justify-center text-center">
-                    <div class="max-w-xl">
-                        <h2 class="font-display font-black text-4xl md:text-7xl text-goofre mb-12 leading-tight">Let's
-                            build the future of Canadian retail.</h2>
-                        <div class="space-y-4 pt-8 border-t border-gray-100">
-                            <div class="font-bold text-2xl text-gray-900">Vivek Sai</div>
-                            <div class="text-gray-500">
-                                <a href="https://viveksai.co/" class="hover:text-goofre transition-colors">Website:
-                                    https://viveksai.co/</a>
-                            </div>
-                            <div class="text-gray-500">
-                                <a href="https://www.linkedin.com/in/viveksai"
-                                    class="hover:text-goofre transition-colors">LinkedIn:
-                                    https://www.linkedin.com/in/viveksai</a>
-                            </div>
-                        </div>
+                <div class="slide-content p-8 flex flex-col items-center justify-center text-center">
+                    <h2 class="font-display font-black text-4xl md:text-6xl text-goofre mb-8 leading-tight">Let's build
+                        the future of Canadian retail.</h2>
+                    <div class="space-y-2 pt-6 border-t border-gray-100">
+                        <div class="font-bold text-xl text-gray-900">Vivek Sai</div>
+                        <div class="text-[10px] text-gray-400">Chief Orchestrator</div>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- Scroll Navigation Helper -->
+        <!-- Navigation Arrows -->
         <button id="prevBtn"
-            class="absolute left-10 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white shadow-xl flex items-center justify-center text-goofre opacity-0 hover:opacity-100 transition-opacity z-50">
-            <i data-lucide="chevron-left"></i>
+            class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-goofre opacity-0 hover:opacity-100 transition-opacity z-50">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
         </button>
         <button id="nextBtn"
-            class="absolute right-10 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white shadow-xl flex items-center justify-center text-goofre opacity-50 hover:opacity-100 transition-opacity z-50">
-            <i data-lucide="chevron-right"></i>
+            class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-goofre opacity-40 hover:opacity-100 transition-opacity z-50">
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
         </button>
     </main>
 
-    <!-- Footer -->
+    <!-- Thin Footer with CTA and Info -->
     <footer
-        class="h-12 flex items-center justify-between px-8 bg-white border-t border-gray-100 text-[10px] font-mono tracking-widest uppercase text-gray-400">
-        <div>Goofre™ | pitch_deck_2026</div>
-        <div class="flex gap-6">
-            <a href="https://viveksai.co/" target="_blank" class="hover:text-goofre transition-colors">viveksai.co</a>
-            <a href="https://www.linkedin.com/in/viveksai" target="_blank"
-                class="hover:text-goofre transition-colors">LinkedIn</a>
+        class="h-12 flex items-center justify-between px-6 bg-white border-t border-gray-100 text-[9px] font-medium uppercase tracking-wider text-gray-500 z-50">
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-1.5 grayscale opacity-80">
+                <div class="w-5 h-5 bg-goofre rounded-md flex items-center justify-center"><span
+                        class="text-white font-black text-[10px]">G</span></div>
+                <span class="font-display font-extrabold tracking-tight text-goofre">Goofre™</span>
+            </div>
+            <div class="flex gap-4">
+                <a href="/os" class="text-goofre hover:underline decoration-goofre/30">Goofre OS docs</a>
+                <a href="/app" class="text-goofre hover:underline decoration-goofre/30">Merchant PWA App</a>
+            </div>
         </div>
-        <div id="slide-count">Slide 1 / 9</div>
+
+        <div class="flex items-center gap-8">
+            <div class="flex gap-4">
+                <a href="https://viveksai.co/" target="_blank"
+                    class="hover:text-goofre transition-colors">viveksai.co</a>
+                <a href="https://www.linkedin.com/in/viveksai" target="_blank"
+                    class="hover:text-goofre transition-colors">LinkedIn</a>
+            </div>
+            <div id="slide-count" class="text-gray-300">1 / 9</div>
+        </div>
     </footer>
 
     <script>
@@ -497,30 +403,30 @@
         const slideCountDisplay = document.getElementById('slide-count');
         const totalSlides = 9;
 
-        // Update nav visibility and count
         const updateUI = () => {
-            const index = Math.round(slider.scrollLeft / window.innerWidth) + 1;
-            slideCountDisplay.innerText = `Slide ${index} / ${totalSlides}`;
-            prevBtn.style.opacity = index === 1 ? '0' : '0.5';
-            nextBtn.style.opacity = index === totalSlides ? '0' : '0.5';
+            const index = Math.round(slider.scrollLeft / slider.offsetWidth) + 1;
+            slideCountDisplay.innerText = `${index} / ${totalSlides}`;
+            prevBtn.style.opacity = index === 1 ? '0' : '0.4';
+            nextBtn.style.opacity = index === totalSlides ? '0' : '0.4';
         };
 
         nextBtn.onclick = () => {
-            slider.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+            slider.scrollBy({ left: slider.offsetWidth, behavior: 'smooth' });
         };
 
         prevBtn.onclick = () => {
-            slider.scrollBy({ left: -window.innerWidth, behavior: 'smooth' });
+            slider.scrollBy({ left: -slider.offsetWidth, behavior: 'smooth' });
         };
 
         slider.onscroll = () => {
             clearTimeout(window.scrollTimeout);
-            window.scrollTimeout = setTimeout(updateUI, 100);
+            window.scrollTimeout = setTimeout(updateUI, 50);
         };
 
-        // Initialize Icons
         lucide.createIcons();
         window.addEventListener('resize', updateUI);
+        // Initial call
+        setTimeout(updateUI, 100);
     </script>
 </body>
 
