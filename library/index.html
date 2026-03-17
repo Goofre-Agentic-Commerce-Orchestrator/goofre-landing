@@ -1,44 +1,673 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goofre | Library</title>
+    <title>Library | Goofre™</title>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        goofre: '#5F3192',
+                        goofre: '#5B249A',
+                        bg: '#0A0A0B',
+                        pane: '#121214',
+                        bordercolor: '#27272A',
+                        muted: '#A1A1AA',
+                        bodytext: '#E4E4E7',
+                        googlered: '#EA4335',
+                        googlegreen: '#34A853',
+                        googleblue: '#4285F4'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        display: ['Outfit', 'sans-serif']
+                        mono: ['Fira Code', 'monospace']
                     }
                 }
             }
         }
     </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #27272A;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+
+        /* Utility to hide scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0A0B;
+            color: #E4E4E7;
+            margin: 0;
+            overflow: hidden; /* Lock the viewport */
+        }
+
+        /* Typography Formatting in Markdown Pane */
+        .prose h2 {
+            color: #FFFFFF;
+            font-size: 1.75rem;
+            line-height: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            margin-top: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        @media (min-width: 768px) {
+            .prose h2 {
+                font-size: 2.25rem;
+                line-height: 2.5rem;
+            }
+        }
+
+        .prose p {
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .prose ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .prose li {
+            margin-bottom: 1rem;
+        }
+        
+        .prose pre {
+            background-color: #0A0A0B;
+            border: 1px solid #27272A;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+        
+        .prose code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: #A1A1AA;
+        }
+        
+        .prose p code {
+            background-color: #27272A;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            color: #E4E4E7;
+        }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center bg-[#FAFAFA] text-[#1A1A1A] px-5">
-    <div class="max-w-md w-full text-center">
-        <div class="mb-4">
-            <div class="w-12 h-12 bg-goofre rounded-xl flex items-center justify-center mx-auto shadow-lg">
-                <span class="text-white font-black text-xl">G</span>
+
+<body class="h-screen w-screen flex flex-col antialiased selection:bg-goofre selection:text-white relative">
+
+    <!-- Header -->
+    <header
+        class="h-[72px] flex-shrink-0 border-b border-bordercolor flex items-center justify-between px-4 md:px-8 bg-bg z-10 relative">
+        <div class="flex flex-col justify-center">
+            <h1 class="text-goofre font-bold text-xl md:text-2xl tracking-tight leading-none">Goofre™</h1>
+            <span
+                class="text-muted text-[10px] md:text-[11px] font-mono mt-1 uppercase tracking-widest hidden sm:block">Agentic
+                Commerce Orchestrator
+                (ACO)™</span>
+            <span
+                class="text-muted text-[10px] md:text-[11px] font-mono mt-1 uppercase tracking-widest block sm:hidden">ACO™</span>
+        </div>
+        <div class="flex gap-4 md:gap-6 text-muted items-center">
+            <a href="https://www.reddit.com/r/Goofre/" target="_blank" rel="noopener noreferrer"
+                class="hover:text-[#FF4500] transition-colors duration-200" aria-label="Reddit">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.688-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" />
+                </svg>
+            </a>
+            <a href="https://discord.gg/Ysz4drAc" target="_blank" rel="noopener noreferrer"
+                class="hover:text-[#5865F2] transition-colors duration-200" aria-label="Discord">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" />
+                </svg>
+            </a>
+            <a href="https://x.com/Goofre_UCP" target="_blank" rel="noopener noreferrer"
+                class="hover:text-white transition-colors duration-200" aria-label="X (Twitter)">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/company/goofre" target="_blank" rel="noopener noreferrer"
+                class="hover:text-[#0077b5] transition-colors duration-200" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-bg relative">
+        <div class="max-w-[1400px] mx-auto min-h-full px-4 sm:px-6 lg:px-8 py-12 pb-32">
+            
+            <!-- Command Pill Navigation -->
+            <div class="sticky top-6 z-40 mx-auto max-w-fit mb-12">
+                <div class="flex items-center gap-1 p-1 bg-pane/80 backdrop-blur-md border border-bordercolor rounded-full shadow-lg">
+                    <div id="filter-tabs" class="flex items-center gap-1 mr-2 px-1">
+                        <button onclick="setFilter('all')" data-filter="all" class="filter-btn text-white bg-zinc-800 px-4 py-1.5 rounded-full text-sm font-medium transition-colors">
+                            All
+                        </button>
+                        <button onclick="setFilter('module')" data-filter="module" class="filter-btn text-muted hover:text-white hover:bg-zinc-800/50 px-4 py-1.5 rounded-full text-sm font-medium transition-colors">
+                            Modules
+                        </button>
+                        <button onclick="setFilter('video')" data-filter="video" class="filter-btn text-muted hover:text-white hover:bg-zinc-800/50 px-4 py-1.5 rounded-full text-sm font-medium transition-colors">
+                            Videos
+                        </button>
+                        <button onclick="setFilter('blog')" data-filter="blog" class="filter-btn text-muted hover:text-white hover:bg-zinc-800/50 px-4 py-1.5 rounded-full text-sm font-medium transition-colors">
+                            Perspectives
+                        </button>
+                    </div>
+
+                    <div class="h-6 w-px bg-bordercolor mx-1"></div>
+
+                    <!-- Developer Mode Toggle -->
+                    <div class="flex items-center gap-2 px-3 py-1.5">
+                        <span id="label-concept" class="text-xs font-semibold uppercase tracking-wider text-goofre transition-colors">Concept</span>
+                        <button onclick="toggleDevMode()" class="relative inline-flex h-6 w-11 items-center rounded-full bg-bordercolor transition-colors focus:outline-none">
+                            <span id="dev-toggle-thumb" class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1"></span>
+                        </button>
+                        <span id="label-code" class="text-xs font-mono uppercase tracking-wider text-muted transition-colors">{ Code }</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bento Grid -->
+            <div id="bento-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[250px]">
+                <!-- Cards injected here -->
             </div>
         </div>
-        <h1 class="font-display font-bold text-3xl mb-3 text-goofre">The Library</h1>
-        <p class="text-zinc-500 mb-8">We are currently curating the Goofre Library. Check back soon for deep-dives, documentation, and agentic commerce resources.</p>
-        <a href="/" class="inline-flex items-center text-sm font-medium text-goofre hover:underline opacity-80 hover:opacity-100 transition-opacity">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-            </svg>
-            Return to Home
-        </a>
+    </main>
+
+    <!-- Side Sheet Overlay -->
+    <div id="sheet-overlay" onclick="closeSheet()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+
+    <!-- Side Sheet Panel -->
+    <div id="side-sheet" class="fixed top-0 right-0 h-full w-full sm:w-[540px] md:w-[600px] lg:w-[700px] bg-pane border-l border-bordercolor z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl">
+        <div class="flex items-center justify-between p-4 border-b border-bordercolor">
+            <button onclick="closeSheet()" class="p-2 text-muted hover:text-white hover:bg-zinc-800 rounded-lg transition-colors flex items-center gap-2">
+                <i data-lucide="x" class="w-5 h-5"></i>
+                <span class="text-sm font-medium">Close</span>
+            </button>
+            <div class="flex gap-2">
+                <button onclick="copyLink()" class="p-2 text-muted hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Copy Link">
+                    <i data-lucide="link" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div id="sheet-content" class="flex-1 overflow-y-auto p-6 md:p-8 lg:p-10 prose prose-invert max-w-none">
+            <!-- Content injected here -->
+        </div>
     </div>
+
+    <!-- 4-Zone Footer Navigation -->
+    <footer class="h-auto md:h-20 flex-shrink-0 border-t border-bordercolor bg-bg flex flex-col md:flex-row items-stretch z-20 relative">
+        <!-- 1. Manifesto -->
+        <a href="/manifesto" target="_blank" rel="noopener noreferrer" class="flex-1 flex flex-col justify-center px-4 py-3 border-b md:border-b-0 md:border-r border-bordercolor hover:bg-zinc-800/50 transition-colors group">
+            <span class="text-white font-medium text-[13px] tracking-wide group-hover:text-goofre transition-colors">Manifesto</span>
+            <span class="text-muted text-[10px] mt-0.5 leading-tight group-hover:text-bodytext transition-colors">The UCP Vision, BSL License details, and a letter from the founder.</span>
+        </a>
+        
+        <!-- 2. Goofre OS™ -->
+        <a href="/os" target="_blank" rel="noopener noreferrer" class="flex-1 flex flex-col justify-center px-4 py-3 border-b md:border-b-0 md:border-r border-bordercolor hover:bg-emerald-900/20 transition-colors group relative overflow-hidden">
+            <span class="absolute inset-x-0 top-0 h-[2px] bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+            <span class="text-emerald-400 font-medium text-[13px] tracking-wide group-hover:text-emerald-300 transition-colors">Goofre OS™</span>
+            <span class="text-muted text-[10px] mt-0.5 leading-tight group-hover:text-bodytext transition-colors">Access the Pro SaaS Agentic Commerce Dashboard for agencies.</span>
+        </a>
+        
+        <!-- 3. Library -->
+        <a href="/library" target="_blank" rel="noopener noreferrer" class="flex-1 flex flex-col justify-center px-4 py-3 border-b md:border-b-0 md:border-r border-bordercolor hover:bg-zinc-800/50 transition-colors group">
+            <span class="text-white font-medium text-[13px] tracking-wide group-hover:text-goofre transition-colors">Library</span>
+            <span class="text-muted text-[10px] mt-0.5 leading-tight group-hover:text-bodytext transition-colors">Technical blogs, API notes, and UCP learning materials.</span>
+        </a>
+        
+        <!-- 4. Co-build -->
+        <a href="/pitch" target="_blank" rel="noopener noreferrer" class="flex-1 flex flex-col justify-center px-4 py-3 hover:bg-zinc-800/50 transition-colors group relative border-b md:border-b-0 border-bordercolor">
+            <div class="flex items-center justify-between">
+                <span class="text-white font-medium text-[13px] tracking-wide group-hover:text-goofre transition-colors">Co-build</span>
+                <span class="px-1.5 py-0.5 rounded bg-goofre/20 text-goofre border border-goofre/30 text-[9px] uppercase tracking-wider font-bold group-hover:bg-goofre group-hover:text-white transition-all">Crowdfund</span>
+            </div>
+            <span class="text-muted text-[10px] mt-0.5 leading-tight pr-2 group-hover:text-bodytext transition-colors">View the investor pitch deck and back the open-source core.</span>
+        </a>
+    </footer>
+
+    <script>
+        // --- DATA ---
+        const libraryData = [
+            {
+                id: 'module-1',
+                type: 'module',
+                title: 'Data Ingestion Orchestration',
+                description: 'How Goofre interfaces with legacy Webhook endpoints to stream product updates.',
+                readTime: '5 min',
+                tags: ['Architecture', 'Webhooks'],
+                content: `
+## Legacy Webhook Architecture
+
+In traditional setups, integrating deeply with Merchant Center required point-to-point connections. Goofre OS acts as a centralized orchestrator.
+
+When a product is updated on Shopify, BigCommerce, or Medusa, a webhook is fired to the Goofre ingest boundary.
+
+The process follows:
+1. **Validation:** Verifying the HMAC signature.
+2. **Transformation:** Normalizing the payload into the Universal Commerce Protocol (UCP) format.
+3. **Distribution:** Queuing the payload to Google APIs via the API wrapper.
+
+For more on the underlying data format, check out {{bridge:blog-1}}.
+
+### Code Implementation
+
+In code mode, you can see how the ingest controller handles the incoming POST request.
+
+\`\`\`typescript
+export async function POST(req: Request) {
+    const rawBody = await req.text()
+    const signature = req.headers.get('x-hmac-sha256')
+    // Verification...
+    const event = JSON.parse(rawBody)
+
+    await enqueueTransformation(event)
+    return new Response('Queued', { status: 202 })
+}
+\`\`\`
+`
+            },
+            {
+                id: 'video-1',
+                type: 'video',
+                title: 'Building Agentic Checkout Flows',
+                description: 'A deep dive into bypassing cart pages and processing transactions inside Gemini.',
+                readTime: '12 min',
+                tags: ['Video', 'Gemini', 'Checkout'],
+                content: `
+## The Death of the Cart Page
+
+In this presentation, we explore how to construct dynamic cart sessions that can be passed as context to an LLM.
+
+<div class="aspect-video bg-zinc-800 rounded-lg flex items-center justify-center my-8 border border-bordercolor shadow-inner">
+    <div class="text-center">
+        <i data-lucide="play-circle" class="w-12 h-12 text-muted mx-auto mb-2 opacity-50"></i>
+        <p class="text-sm font-mono text-muted">Video Player Placeholder</p>
+    </div>
+</div>
+
+The core principle relies on utilizing API-first commerce backends (like MedusaJS) to construct a localized \`cart_id\` that is injected into the LLM system prompt. 
+
+See how this integrates with the overall system in {{bridge:module-1}}.
+`
+            },
+            {
+                id: 'blog-1',
+                type: 'blog',
+                title: 'Defining the Universal Commerce Protocol (UCP)',
+                description: 'Why standards are needed for AI agents to consistently understand product catalogs.',
+                readTime: '8 min',
+                tags: ['Thought Leadership', 'Standards'],
+                content: `
+## Why UCP?
+
+Current AI Agents struggle with unstructured product data. If you ask Gemini to "find me a blue shirt under $50", it relies on scraping web pages containing that text, which is slow and often inaccurate.
+
+The **Universal Commerce Protocol (UCP)** defines a strict schema that allows merchants to pass structural graph data directly to search agents.
+
+### The Problem
+
+- HTML microdata is often ignored or poorly implemented.
+- JSON-LD is useful for SEO, but lacks transactional capabilities (adding to cart).
+- Merchant Center feeds are rigid and isolated.
+
+### The Solution
+
+A unified standard. By adopting UCP, agents can programmatically traverse a product catalog, query variant availability in real time, and execute a checkout vector—all without loading a webpage.
+
+Learn more about how Goofre processes incoming data in {{bridge:module-1}}.
+`
+            },
+            {
+                id: 'module-2',
+                type: 'module',
+                title: 'Goofre Analytics Engine',
+                description: 'Real-time telemetry tracking for AI-driven conversions.',
+                readTime: '6 min',
+                tags: ['Analytics', 'Telemetry'],
+                content: `
+## Tracking Agentic Conversions
+
+Traditional analytics rely on pixels and pageviews. In Agentic Commerce, there are no pages. A user might complete an entire purchase inside a WhatsApp chat powered by Gemini.
+
+How do you attribute the sale?
+
+### Event Signatures
+
+Goofre captures telemetry at the API layer. Every time a cart is modified or completed, an event is emitted encapsulating the \`agent_source\`, \`session_id\`, and \`intent_vector\`.
+
+\`\`\`json
+{
+  "event_type": "checkout.completed",
+  "source": "gemini_voice_assistant",
+  "metadata": {
+     "conversation_turns": 4,
+     "cart_value": 149.99
+  }
+}
+\`\`\`
+`
+            }
+        ];
+
+        // --- STATE ---
+        let currentFilter = 'all';
+        let isDevMode = false;
+        let currentSheetId = null;
+
+        // --- DOM ELEMENTS ---
+        const bentoGrid = document.getElementById('bento-grid');
+        const sheetOverlay = document.getElementById('sheet-overlay');
+        const sideSheet = document.getElementById('side-sheet');
+        const sheetContent = document.getElementById('sheet-content');
+        
+        const labelConcept = document.getElementById('label-concept');
+        const labelCode = document.getElementById('label-code');
+        const devToggleThumb = document.getElementById('dev-toggle-thumb');
+
+        // --- RENDERING ---
+        function getIconForType(type) {
+            switch(type) {
+                case 'module': return '<i data-lucide="blocks" class="w-5 h-5 text-blue-400"></i>';
+                case 'video': return '<i data-lucide="play-circle" class="w-5 h-5 text-red-400"></i>';
+                case 'blog': return '<i data-lucide="file-text" class="w-5 h-5 text-emerald-400"></i>';
+                default: return '<i data-lucide="file" class="w-5 h-5 text-muted"></i>';
+            }
+        }
+
+        function renderGrid() {
+            bentoGrid.innerHTML = '';
+            
+            const filteredData = currentFilter === 'all' 
+                ? libraryData 
+                : libraryData.filter(item => item.type === currentFilter);
+
+            filteredData.forEach((item, index) => {
+                // Formatting classes based on type/index to simulate Bento layout
+                let spanClasses = 'col-span-1 border border-bordercolor bg-pane/50 hover:bg-zinc-800/40 rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden relative group';
+                
+                // Let's make the first item span 2 columns on tablet/desktop if it's a module
+                if (index === 0 && item.type === 'module') {
+                    spanClasses += ' md:col-span-2 md:row-span-2';
+                } else if (item.type === 'video') {
+                    spanClasses += ' md:row-span-2';
+                }
+
+                const fontClass = isDevMode ? 'font-mono tracking-tight' : 'font-sans';
+
+                const cardHtml = `
+                    <div class="${spanClasses}" onclick="openSheet('${item.id}')">
+                        <!-- Gradient Hover Effect -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-goofre/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <div class="p-6 md:p-8 flex flex-col h-full relative z-10">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="p-2.5 bg-zinc-900 rounded-xl border border-zinc-800 shadow-inner">
+                                    ${getIconForType(item.type)}
+                                </div>
+                                <span class="text-xs font-mono text-muted uppercase tracking-widest bg-zinc-900 px-2 py-1 rounded-md border border-zinc-800">
+                                    ${item.readTime}
+                                </span>
+                            </div>
+                            
+                            <div class="mt-auto">
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    ${item.tags.map(tag => `<span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded bg-zinc-800 text-zinc-300">${tag}</span>`).join('')}
+                                </div>
+                                <h3 class="text-xl md:text-2xl font-semibold mb-2 text-white ${fontClass}">${item.title}</h3>
+                                <p class="text-muted text-sm md:text-base leading-relaxed line-clamp-2">${item.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                bentoGrid.innerHTML += cardHtml;
+            });
+
+            // Re-bind Lucide icons
+            lucide.createIcons();
+        }
+
+        // --- CONTENT PARSING & BRIDGES ---
+        function createBridgeHtml(targetId) {
+            const target = libraryData.find(d => d.id === targetId);
+            if (!target) return `<span class="text-red-500">Broken Link [${targetId}]</span>`;
+
+            return `
+                <div onclick="switchSheet('${targetId}')" class="my-6 border border-bordercolor bg-[#151518] hover:bg-[#1a1a1e] rounded-xl p-4 cursor-pointer transition-all flex items-center justify-between group shadow-sm">
+                    <div class="flex items-center gap-4">
+                        <div class="p-2 bg-zinc-900 rounded-lg border border-zinc-800 group-hover:border-goofre/50 transition-colors">
+                            ${getIconForType(target.type)}
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-mono uppercase tracking-widest text-muted mb-1">Related ${target.type}</div>
+                            <div class="font-medium text-white group-hover:text-goofre transition-colors text-sm">${target.title}</div>
+                        </div>
+                    </div>
+                    <i data-lucide="arrow-right" class="w-4 h-4 text-muted group-hover:text-goofre transition-colors transform group-hover:translate-x-1"></i>
+                </div>
+            `;
+        }
+
+        function renderMarkdown(rawMd) {
+            const html = marked.parse(rawMd);
+            
+            // Regex to find {{bridge:id}}
+            const bridgeRegex = /\{\{bridge:([^}]+)\}\}/g;
+            return html.replace(bridgeRegex, (match, targetId) => {
+                return createBridgeHtml(targetId);
+            });
+        }
+
+        // --- SIDE SHEET UI ---
+        function openSheet(id) {
+            const item = libraryData.find(d => d.id === id);
+            if (!item) return;
+
+            currentSheetId = id;
+
+            // Render Header & Markdown
+            const fontClass = isDevMode ? 'font-mono' : 'font-sans';
+            
+            sheetContent.innerHTML = `
+                <div class="mb-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-zinc-900 rounded-lg border border-zinc-800 shadow-sm">
+                            ${getIconForType(item.type)}
+                        </div>
+                        <span class="text-xs font-mono text-muted uppercase tracking-widest bg-zinc-900 px-2 py-1 rounded-md border border-zinc-800">
+                            ${item.type}
+                        </span>
+                        <span class="text-xs font-mono text-muted">·</span>
+                        <span class="text-xs font-mono text-muted">${item.readTime}</span>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight ${fontClass}">${item.title}</h1>
+                    <p class="text-lg text-muted">${item.description}</p>
+                </div>
+                
+                <div class="w-full h-px bg-bordercolor mb-8"></div>
+                
+                <div class="${fontClass} markdown-body">
+                    ${renderMarkdown(item.content)}
+                </div>
+            `;
+
+            lucide.createIcons();
+
+            // Set URL
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.set('id', id);
+            window.history.pushState({ id }, '', newUrl);
+
+            // Animate In
+            sheetOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            sheetOverlay.classList.add('opacity-100');
+            sideSheet.classList.remove('translate-x-full');
+            sideSheet.classList.add('translate-x-0');
+        }
+
+        function closeSheet() {
+            sheetOverlay.classList.remove('opacity-100');
+            sheetOverlay.classList.add('opacity-0', 'pointer-events-none');
+            sideSheet.classList.remove('translate-x-0');
+            sideSheet.classList.add('translate-x-full');
+
+            // Clear URL
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.delete('id');
+            window.history.pushState({}, '', newUrl);
+            
+            currentSheetId = null;
+        }
+
+        function switchSheet(id) {
+            // Briefly fade content then swap
+            sheetContent.style.opacity = '0';
+            setTimeout(() => {
+                openSheet(id);
+                sheetContent.style.opacity = '1';
+                sheetContent.scrollTo(0,0);
+            }, 200);
+        }
+
+        function copyLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link copied to clipboard!');
+            });
+        }
+
+        // --- CONTROLS ---
+        function setFilter(type) {
+            currentFilter = type;
+            
+            // Update Active Tab Styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if(btn.dataset.filter === type) {
+                    btn.classList.remove('text-muted', 'hover:bg-zinc-800/50');
+                    btn.classList.add('text-white', 'bg-zinc-800');
+                } else {
+                    btn.classList.add('text-muted', 'hover:bg-zinc-800/50');
+                    btn.classList.remove('text-white', 'bg-zinc-800');
+                }
+            });
+
+            renderGrid();
+        }
+
+        function toggleDevMode() {
+            isDevMode = !isDevMode;
+            
+            if(isDevMode) {
+                devToggleThumb.classList.remove('translate-x-1');
+                devToggleThumb.classList.add('translate-x-6');
+                
+                labelConcept.classList.replace('text-goofre', 'text-muted');
+                labelConcept.classList.replace('font-semibold', 'font-normal');
+                
+                labelCode.classList.replace('text-muted', 'text-goofre');
+                labelCode.classList.replace('font-normal', 'font-semibold');
+            } else {
+                devToggleThumb.classList.remove('translate-x-6');
+                devToggleThumb.classList.add('translate-x-1');
+                
+                labelConcept.classList.replace('text-muted', 'text-goofre');
+                labelConcept.classList.replace('font-normal', 'font-semibold');
+                
+                labelCode.classList.replace('text-goofre', 'text-muted');
+                labelCode.classList.replace('font-semibold', 'font-normal');
+            }
+
+            renderGrid();
+
+            // Re-render open sheet if present
+            if (currentSheetId) {
+                const sheetScroll = sheetContent.scrollTop;
+                openSheet(currentSheetId);
+                sheetContent.scrollTop = sheetScroll;
+            }
+        }
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check URL parameters for direct link
+            const urlParams = new URLSearchParams(window.location.search);
+            const idParam = urlParams.get('id');
+            
+            renderGrid();
+            lucide.createIcons();
+
+            if (idParam) {
+                // Short timeout to ensure icons and grid render before animating
+                setTimeout(() => openSheet(idParam), 100);
+            }
+        });
+
+        // Handle back/forward browser buttons closing/opening sheet
+        window.addEventListener('popstate', (e) => {
+            if (e.state && e.state.id) {
+                openSheet(e.state.id);
+            } else {
+                // Determine if URL has ID (if arrived via a bookmark)
+                const urlParams = new URLSearchParams(window.location.search);
+                const idParam = urlParams.get('id');
+                if (idParam) openSheet(idParam);
+                else closeSheet();
+            }
+        });
+    </script>
 </body>
+
 </html>
