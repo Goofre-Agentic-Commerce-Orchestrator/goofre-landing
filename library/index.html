@@ -207,14 +207,8 @@
 
                     <div class="h-6 w-px bg-bordercolor mx-1"></div>
 
-                    <!-- Developer Mode Toggle -->
-                    <div class="flex items-center gap-2 px-3 py-1.5">
-                        <span id="label-concept" class="text-xs font-semibold uppercase tracking-wider text-goofre transition-colors">Concept</span>
-                        <button onclick="toggleDevMode()" class="relative inline-flex h-6 w-11 items-center rounded-full bg-bordercolor transition-colors focus:outline-none">
-                            <span id="dev-toggle-thumb" class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1"></span>
-                        </button>
-                        <span id="label-code" class="text-xs font-mono uppercase tracking-wider text-muted transition-colors">{ Code }</span>
-                    </div>
+                    <!-- Content type badge -->
+                    <span class="text-xs font-semibold uppercase tracking-wider text-goofre px-3 py-1.5">Concept</span>
                 </div>
             </div>
 
@@ -517,7 +511,7 @@ Goofre captures telemetry at the API layer. Every time a cart is modified or com
             currentSheetId = id;
 
             // Render Header & Markdown
-            const fontClass = isDevMode ? 'font-mono' : 'font-sans';
+            const fontClass = 'font-sans'; // Always font-sans
             
             sheetContent.innerHTML = `
                 <div class="mb-8">
@@ -605,7 +599,8 @@ Goofre captures telemetry at the API layer. Every time a cart is modified or com
             renderGrid();
         }
 
-        function toggleDevMode() {
+        // toggleDevMode removed — concept-only mode
+        function _unused_toggleDevMode() {
             isDevMode = !isDevMode;
             
             if(isDevMode) {
