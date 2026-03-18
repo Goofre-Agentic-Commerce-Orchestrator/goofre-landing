@@ -444,11 +444,11 @@ Goofre captures telemetry at the API layer. Every time a cart is modified or com
                 const fontClass = isDevMode ? 'font-mono tracking-tight' : 'font-sans';
 
                 const cardHtml = `
-                    <div class="${cardClasses} ${minH}" onclick="openSheet('${item.id}')">
+                    <div class="${cardClasses} ${minH} flex flex-col" onclick="openSheet('${item.id}')">
                         <!-- Gradient Hover Effect -->
                         <div class="absolute inset-0 bg-gradient-to-br from-goofre/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                        <div class="p-6 flex flex-col justify-between h-full relative z-10">
+                        <div class="p-6 flex flex-col justify-between flex-1 relative z-10">
                             <!-- Top row: icon + read time pinned to top -->
                             <div class="flex items-start justify-between">
                                 <div class="p-2.5 bg-zinc-900 rounded-xl border border-zinc-800 shadow-inner">
