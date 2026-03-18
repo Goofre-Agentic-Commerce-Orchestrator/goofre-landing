@@ -194,9 +194,6 @@
                         <button onclick="setFilter('all')" data-filter="all" class="filter-btn text-white bg-zinc-800 px-4 py-1.5 rounded-full text-sm font-medium transition-colors">
                             All
                         </button>
-                        <button onclick="setFilter('module')" data-filter="module" class="filter-btn text-muted hover:text-white hover:bg-zinc-800/50 px-4 py-1.5 rounded-full text-sm font-medium transition-colors">
-                            Modules
-                        </button>
                         <button onclick="setFilter('video')" data-filter="video" class="filter-btn text-muted hover:text-white hover:bg-zinc-800/50 px-4 py-1.5 rounded-full text-sm font-medium transition-colors">
                             Videos
                         </button>
@@ -540,7 +537,7 @@ You've completed the Goofre module track. Explore the supplementary content — 
 
         const supplementaryData = [
             {
-                id: 'video-1',
+                id: 'video-checkout-flows',
                 type: 'video',
                 title: 'Building Agentic Checkout Flows',
                 description: 'A deep dive into bypassing cart pages and processing transactions inside Gemini.',
@@ -564,30 +561,141 @@ See how this integrates with the overall system in {{bridge:module-4}}.
 `
             },
             {
-                id: 'blog-1',
+                id: 'blog-what-is-agentic-commerce',
                 type: 'blog',
-                title: 'Defining the Universal Commerce Protocol (UCP)',
-                description: 'Why standards are needed for AI agents to consistently understand product catalogs.',
-                readTime: '8 min',
-                tags: ['Thought Leadership', 'Standards'],
+                title: 'What Is Agentic Commerce? The 101 Guide',
+                description: 'The fundamentals of agentic commerce, how it works, and why platforms are racing toward autonomy.',
+                readTime: '7 min',
+                tags: ['101', 'Agentic Commerce', 'Fundamentals'],
                 content: `
-## Why UCP?
+## The End of the Storefront
 
-Current AI Agents struggle with unstructured product data. If you ask Gemini to "find me a blue shirt under $50", it relies on scraping web pages containing that text, which is slow and often inaccurate.
+Agentic Commerce is the next fundamental shift in online retail. It is the evolution from *user-directed* shopping (browsing categories, reading reviews, adding to cart, filling out checkout forms) to *agent-directed* shopping. 
 
-The **Universal Commerce Protocol (UCP)** defines a strict schema that allows merchants to pass structural graph data directly to search agents.
+In this new paradigm, users express intent directly to an AI agent ("Reorder my usual coffee beans" or "Find me a waterproof tent under $200 that ships by Friday"), and the agent autonomously navigates systems, builds the cart, and securely executes the transaction on the user's behalf. 
 
-### The Problem
+### Why is it called "Agentic"?
 
-- HTML microdata is often ignored or poorly implemented.
-- JSON-LD is useful for SEO, but lacks transactional capabilities (adding to cart).
-- Merchant Center feeds are rigid and isolated.
+The term "agentic" refers to the autonomous nature of AI agents capable of reasoning, planning, and executing multi-step tasks. In commerce, an agent isn't just a chatbot answering questions—it is a secure proxy taking meaningful actions within explicit consent boundaries. It negotiates prices, verifies inventory, and uses stored payment tokens to accomplish the goal without human micromamagement.
 
-### The Solution
+### What it Means for the Ecosystem
 
-A unified standard. By adopting UCP, agents can programmatically traverse a product catalog, query variant availability in real time, and execute a checkout vector — all without loading a webpage.
+**For Businesses and Merchants:**
+Agentic Commerce eliminates the traditional conversion funnel. The friction points of slow-loading mobile sites, complex navigation, and cart abandonment are bypassed entirely. It means higher conversion rates through hyper-personalization, but it also requires merchants to ensure their product catalogs are highly exposed, structured, and easily digestible by AI crawlers and APIs.
 
-Learn more about the full UCP spec in {{bridge:module-3}}.
+**For Developers:**
+The era of pixel-perfecting button hover states on storefronts is giving way to data engineering. Developers will shift their focus toward building robust, schema-driven APIs, fast headless backends, and semantic data models that can be injected straight into an LLM's context window.
+
+**For E-commerce Platforms:**
+Platforms are rapidly transitioning from static hosting environments to dynamic, autonomous engines. They must now serve two types of customers: human shoppers and autonomous agents. Platforms that fail to offer robust, agent-friendly APIs will become invisible to tomorrow's primary consumer layer.
+`
+            },
+            {
+                id: 'blog-llms-in-agentic-commerce',
+                type: 'blog',
+                title: 'What Are LLMs Doing in Commerce and Why?',
+                description: 'How OpenAI, Google Gemini, Anthropic, and Perplexity are driving the Agentic Commerce revolution.',
+                readTime: '7 min',
+                tags: ['LLMs', 'OpenAI', 'Gemini', 'Protocols'],
+                content: `
+## The New Checkout Interface is a Text Box
+
+Large Language Models (LLMs) are completely dismantling the legacy e-commerce tech stack. Models from OpenAI, Google (Gemini), Anthropic (Claude), and Perplexity are no longer just information retrieval systems—they are becoming the primary transactional interface.
+
+### How and Why LLMs are Taking Over
+
+**Why?** Because consumers are tired of infinite scroll. Traditional e-commerce shifts the burden of sorting, filtering, and decision-making onto the user. LLMs invert this logic. Users want immediate fulfillment, and LLMs deliver precise, reasoning-backed answers, drastically reducing the time from intent to purchase. 
+
+**How?** Modern LLMs utilize *Function Calling* and *Tool Use*. When a user types a query into ChatGPT or speaks into a Gemini-enabled device, the LLM doesn't merely output text. It triggers hidden API calls to merchant backends—checking real-time stock, creating temporary session carts, and finalizing orders securely using vaulted payment credentials.
+
+### The Role of Protocols like UCP 
+
+The challenge LLMs face today is fragmentation. If every merchant builds a custom API, AI platforms can't scale their integrations. 
+
+This is why open protocols are incredibly vital. Instead of custom scraping, LLMs rely on protocols like the Universal Commerce Protocol (UCP), Agent Payments Protocol (AP2), and Model Context Protocol (MCP) to standardize communication. These protocols define exactly how an LLM can request a product graph, instantiate a cart, and execute checkout, regardless of the underlying platform. 
+
+This shared language enables Perplexity to buy a laptop or Claude to book a flight using the same underlying mechanics. LLMs are stepping in as the universal routing layer between human desire and merchant fulfillment.
+`
+            },
+            {
+                id: 'video-webhook-orchestration',
+                type: 'video',
+                title: 'The Future of APIs: How LLMs Consume Webhooks',
+                description: 'Understanding how raw merchant data is transformed into structured AI context windows.',
+                readTime: '15 min',
+                tags: ['Video', 'Webhooks', 'Data'],
+                content: `
+## Ingestion at the Edge
+
+A technical breakdown of how webhook payloads from legacy systems like Shopify or Magento are intercepted, validated, and mapped to the Universal Commerce Protocol (UCP).
+
+<div class="aspect-video bg-zinc-800 rounded-lg flex items-center justify-center my-8 border border-bordercolor shadow-inner">
+    <div class="text-center">
+        <i data-lucide="play-circle" class="w-12 h-12 text-muted mx-auto mb-2 opacity-50"></i>
+        <p class="text-sm font-mono text-muted">Video coming soon</p>
+    </div>
+</div>
+
+This session covers the challenges of non-standard price serialization, multi-currency handling for stateless agents, and why LLM hallucination risks drop by 90% when using graph-structured inputs.
+`
+            },
+            {
+                id: 'blog-what-is-ucp',
+                type: 'blog',
+                title: 'What Is UCP? Google’s Universal Commerce Protocol',
+                description: 'A deep dive into the open standard designed to enable frictionless AI agent transactions.',
+                readTime: '7 min',
+                tags: ['UCP', 'Google', 'Standards'],
+                content: `
+## The Standard for Agentic Transactions
+
+The Universal Commerce Protocol (UCP) is an open-source standard designed to facilitate seamless commerce interactions across platforms, AI agents, and payment providers. Co-developed by Google and other industry leaders, its goal is to standardize the entire commerce journey, eliminating the need for rigid, custom API integrations for every merchant connection.
+
+According to the official specs, *"UCP provides a common language for consumer AI interfaces to communicate with merchant checkout systems, breaking down the shopping experience into standardized capabilities like Discovery, Cart, and Checkout."*
+
+### Why UCP Exists
+
+For an AI agent to buy a product, it must understand a catalog uniformly—whether querying Shopify, Magento, or a custom backend. UCP solves this by enforcing semantic consistency. Agents can reliably parse UCP-compliant product data, seamlessly embed stateless "Cart Vectors" into their context windows, and initiate checkouts directly inside conversational experiences. 
+
+### Why Google Stands Strongest in Commerce AI
+
+Google’s positioning with UCP is formidable due to its unparalleled, deeply integrated technology stack:
+
+1. **Search Engine Dominance**: Google controls the primary starting point for global product discovery.
+2. **Google Merchant Center**: They already possess a massive, structured database of global retail inventory data.
+3. **The Gemini Ecosystem**: Google's LLM ecosystem spans deeply from Android OS level integration to web search.
+4. **Google Pay**: They control a massively distributed, highly trusted payment vault.
+
+By natively integrating UCP into AI Mode globally, Google is effectively transforming the Search Engine Results Page (SERP) from a directory of links into a localized transactional engine. Merchants who adopt UCP remain the merchant of record, maintaining control over their brand logic while offloading the UX friction to Google's highly optimized, AI-native surfaces.
+`
+            },
+            {
+                id: 'blog-ecommerce-platforms-ai-transformation',
+                type: 'blog',
+                title: 'How Ecommerce Platforms Are Transforming with AI',
+                description: 'The shift from static storefronts to autonomous agentic engines: Shopify, Wix, and Medusa.',
+                readTime: '7 min',
+                tags: ['E-commerce', 'Platforms', 'AI'],
+                content: `
+## Moving Toward Absolute Autonomy
+
+E-commerce platforms are realizing that their survival depends on their ability to expose their merchants to AI agents. Developers must understand that e-commerce infrastructure is rapidly transitioning from monolithic, UI-heavy storefronts to headless, logic-driven engines that are entirely autonomous.
+
+### Shopify: Stagnation is Slow-Motion Failure
+
+Shopify is aggressively reinventing itself as an AI-first canvas. CEO Tobi Lütke recently mandated that the effective use of AI is a primary expectation of all employees, stating: *"Our job is to figure out what entrepreneurship looks like in a world where AI is universally available... stagnation is a slow-motion failure."* 
+
+The data proves this trajectory. Shopify reported that traffic from AI tools to their merchants' stores surged sevenfold, and **orders attributed to AI searches skyrocketed 15x since January 2025**. Furthermore, their native AI assistant, Sidekick, helped merchants generate roughly 4,000 custom applications and 29,000 automations within mere weeks. Shopify has also established key partnerships to develop the Universal Commerce Protocol (UCP), ensuring their merchants plug directly into major LLMs.
+
+### Wix Base44: "Vibe Coding" E-commerce
+
+Wix is pushing beyond static templates into pure intent-driven software. Following their $80M acquisition of Base44 in 2025, Wix allows users to literally "vibe code" entire commerce ecosystems. Business owners use pure natural language prompts to spin up fully functional frontends, logic-heavy backends, and smart inventory databases. The platform utilizes AI agents not just to *run* the store, but to dynamically *build* the store architecture itself.
+
+### Medusa Bloom: The AI-Powered Open Source Alternative
+
+Medusa.js took a different approach with **Medusa Bloom**, an AI assistant tightly woven into their open-source e-commerce framework. Developers and non-technical founders can use natural language prompts to instantly generate fully connected storefronts, bespoke admin dashboards, and custom catalog architecture directly inside the browser. It drastically lowers the barrier for rapid prototyping of complex, decoupled e-commerce systems without risking vendor lock-in.
+
+The platforms have spoken: the future is highly autonomous, deeply programmatic, and driven by intelligent agents.
 `
             }
         ];
@@ -717,8 +825,8 @@ Learn more about the full UCP spec in {{bridge:module-3}}.
 
             allSupp.forEach((item, index) => {
                 let cardClasses = 'border border-bordercolor bg-pane/60 hover:bg-zinc-800/40 rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden relative group';
-                if (index === 0) cardClasses += ' md:col-span-2';
-                const minH = index === 0 ? 'min-h-[220px]' : 'min-h-[200px]';
+                if (index === 0 || index === 3 || index === 4) cardClasses += ' md:col-span-2';
+                const minH = (index === 0 || index === 3 || index === 4) ? 'min-h-[220px]' : 'min-h-[200px]';
 
                 const cardHtml = `
                     <div class="${cardClasses} ${minH} flex flex-col" onclick="openSheet('${item.id}')">
