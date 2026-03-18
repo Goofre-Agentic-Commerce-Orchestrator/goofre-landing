@@ -208,10 +208,31 @@
                 </div>
             </div>
 
+            <!-- Module Track -->
+            <div id="module-track-section" class="mb-10">
+                <div class="flex items-center gap-3 mb-5">
+                    <i data-lucide="layout-template" class="w-4 h-4 text-goofre"></i>
+                    <h2 class="text-xs font-mono uppercase tracking-widest text-zinc-500">Learning Path · 5 Modules</h2>
+                    <div class="flex-1 h-px bg-bordercolor/40"></div>
+                </div>
+                <!-- Horizontal scrollable module track — populated by JS -->
+                <div id="module-track" class="flex items-stretch gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+                    <!-- Module cards injected here -->
+                </div>
+            </div>
+
+            <!-- Supplementary Content -->
+            <div class="flex items-center gap-3 mb-5">
+                <i data-lucide="library" class="w-4 h-4 text-zinc-600"></i>
+                <h2 class="text-xs font-mono uppercase tracking-widest text-zinc-500">Supplementary Content</h2>
+                <div class="flex-1 h-px bg-bordercolor/40"></div>
+            </div>
+
             <!-- Bento Grid -->
             <div id="bento-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <!-- Cards injected here -->
             </div>
+
         </div>
     </main>
 
@@ -264,46 +285,260 @@
     </footer>
 
     <script>
-        // --- DATA ---
-        const libraryData = [
+        // ─── DATA ───────────────────────────────────────────────────────────────
+        const moduleTrack = [
             {
                 id: 'module-1',
                 type: 'module',
-                title: 'Data Ingestion Orchestration',
-                description: 'How Goofre interfaces with legacy Webhook endpoints to stream product updates.',
+                order: 1,
+                title: 'The Paradigm Shift: From Browsing to Buying by Command',
+                description: 'Why traditional e-commerce is broken for the AI era, and what replaces it.',
                 readTime: '5 min',
-                tags: ['Architecture', 'Webhooks'],
+                tags: ['Foundation', 'Architecture'],
+                content: `
+## The End of the Storefront
+
+For 30 years, commerce meant: browse a website, add to cart, checkout. That loop is collapsing.
+
+In 2024, AI agents began executing intent — not just researching it. When a user says *"order me the same protein powder I bought last month"* to a voice assistant, there is no browse phase. No product page. No cart. Just a transaction.
+
+Goofre is built for this world.
+
+### The Three Eras of Commerce
+
+**Era 1 — Catalogue (1995–2005):** Physical stores moved online. The web became a digital shelf.
+
+**Era 2 — Search (2005–2020):** Google and Amazon SEO dominated. Discovery shifted from shelves to algorithms.
+
+**Era 3 — Agentic (2024–):** AI agents transact on behalf of users. Discovery, intent, and checkout collapse into a single command.
+
+### Why Legacy Infrastructure Fails
+
+The stack powering Era 2 — Shopify themes, pixel tracking, A/B-tested checkout pages — was designed to persuade a human. It has no concept of machine-readable transactional intent.
+
+When Gemini or GPT calls a checkout API:
+- It receives HTML, not structured data
+- HMAC-signed webhooks aren't designed for LLM parsing
+- Session-based carts expire before an agent completes reasoning
+
+Goofre solves this with **four interconnected primitives**: a Universal Commerce Protocol, an Ingest layer, an Analytics layer, and a Checkout layer.
+
+This module track will walk you through each one.
+
+See how the data layer works in {{bridge:module-2}}.
+`
+            },
+            {
+                id: 'module-2',
+                type: 'module',
+                order: 2,
+                title: 'Data Ingestion & the Webhook Orchestrator',
+                description: 'How Goofre normalizes merchant data from legacy webhook endpoints into UCP format.',
+                readTime: '6 min',
+                tags: ['Webhooks', 'Architecture'],
                 content: `
 ## Legacy Webhook Architecture
 
-In traditional setups, integrating deeply with Merchant Center required point-to-point connections. Goofre OS acts as a centralized orchestrator.
+In traditional setups, integrating with Merchant Center required point-to-point connections. Goofre acts as a centralized orchestrator — a unified ingest boundary that normalizes messy real-world data into machine-friendly structure.
 
-When a product is updated on Shopify, BigCommerce, or Medusa, a webhook is fired to the Goofre ingest boundary.
+When a product is updated on Shopify, BigCommerce, or Medusa, a webhook fires to the Goofre ingest boundary.
 
-The process follows:
-1. **Validation:** Verifying the HMAC signature.
-2. **Transformation:** Normalizing the payload into the Universal Commerce Protocol (UCP) format.
-3. **Distribution:** Queuing the payload to Google APIs via the API wrapper.
+The process follows three stages:
 
-For more on the underlying data format, check out {{bridge:blog-1}}.
+**1. Validation** — Verifying the HMAC signature to confirm the webhook is from a trusted merchant origin.
 
-### Code Implementation
+**2. Transformation** — Normalizing the raw payload into the Universal Commerce Protocol (UCP) schema. Price, availability, variant structure, and locale are all standardized.
 
-In code mode, you can see how the ingest controller handles the incoming POST request.
+**3. Distribution** — Queuing the UCP-formatted payload downstream to the analytics and checkout engines.
+
+### Why Normalization Matters
+
+An LLM reading "price: '$49.99'" versus \`{ "amount": 4999, "currency": "USD" }\` is the difference between a hallucinated answer and a correct one. Structured data is a first-class citizen in the Goofre ingest layer.
 
 \`\`\`typescript
 export async function POST(req: Request) {
     const rawBody = await req.text()
     const signature = req.headers.get('x-hmac-sha256')
-    // Verification...
+    if (!verifyHmac(rawBody, signature)) {
+        return new Response('Unauthorized', { status: 401 })
+    }
     const event = JSON.parse(rawBody)
-
-    await enqueueTransformation(event)
+    const ucp = transformToUCP(event)
+    await enqueueTransformation(ucp)
     return new Response('Queued', { status: 202 })
 }
 \`\`\`
+
+For more on the underlying data format this produces, see {{bridge:module-3}}.
 `
             },
+            {
+                id: 'module-3',
+                type: 'module',
+                order: 3,
+                title: 'Universal Commerce Protocol (UCP)',
+                description: 'The open schema that lets AI agents consistently read, reason about, and transact on product data.',
+                readTime: '7 min',
+                tags: ['UCP', 'Standards'],
+                content: `
+## The Language Agents Speak
+
+AI agents fail at commerce not because they're unintelligent — they fail because product data is structurally inconsistent. Every merchant organizes their catalog differently. Every platform serializes variants differently. Every cart system handles session state differently.
+
+UCP is the fix. It is a consistent, machine-readable schema that any commerce backend can emit and any AI agent can consume.
+
+### Core UCP Objects
+
+**Product Node**
+\`\`\`json
+{
+  "ucp_version": "1.0",
+  "product_id": "gfr_prod_b3x7k",
+  "title": "Organic Whey Protein — Vanilla",
+  "variants": [
+    {
+      "variant_id": "gfr_var_500g",
+      "weight_g": 500,
+      "price": { "amount": 3999, "currency": "USD" },
+      "in_stock": true,
+      "fulfillment_days": 2
+    }
+  ],
+  "intent_signals": ["reorder", "gift", "bulk"]
+}
+\`\`\`
+
+The \`intent_signals\` field is unique to UCP — it gives agents structured hints about common purchase contexts, reducing reasoning steps needed to complete a transaction.
+
+**Cart Vector**
+
+Unlike a traditional cart session, a UCP cart vector is stateless and embeddable directly into an LLM context window:
+
+\`\`\`json
+{
+  "cart_id": "gfr_cart_a9f2",
+  "items": [{ "variant_id": "gfr_var_500g", "qty": 2 }],
+  "ttl_seconds": 3600,
+  "checkout_token": "eyJhbGc..."
+}
+\`\`\`
+
+The \`ttl_seconds\` and \`checkout_token\` ensure agents can complete a purchase even across multi-turn conversations.
+
+### Adoption Path
+
+UCP is designed to coexist with existing infrastructure. Merchants run the Goofre adapter alongside their current stack — no migration required. The adapter reads your existing product feed and emits UCP on the side.
+
+Next, see how Goofre tracks what agents do with this data: {{bridge:module-4}}.
+`
+            },
+            {
+                id: 'module-4',
+                type: 'module',
+                order: 4,
+                title: 'Agentic Analytics Engine',
+                description: 'Telemetry without pageviews — how Goofre tracks AI-driven conversions at the API layer.',
+                readTime: '6 min',
+                tags: ['Analytics', 'Telemetry'],
+                content: `
+## Tracking Without a Pixel
+
+Traditional analytics rely on pixels and pageviews. In Agentic Commerce, there are no pages. A user might complete an entire purchase inside a WhatsApp chat powered by Gemini. A Google Home device might reorder coffee beans in 8 words.
+
+How do you attribute the sale? How do you measure funnel drop-off when there's no funnel?
+
+### Event Signatures
+
+Goofre captures telemetry at the API layer. Every time a cart is modified or completed, an event is emitted encapsulating the conversation context, agent identity, and outcome:
+
+\`\`\`json
+{
+  "event_type": "checkout.completed",
+  "agent_source": "gemini_voice_assistant",
+  "session_id": "sess_9a2f",
+  "intent_vector": "reorder_protein",
+  "metadata": {
+    "conversation_turns": 4,
+    "cart_value_usd": 149.99,
+    "fulfillment_confirmed": true
+  }
+}
+\`\`\`
+
+The \`conversation_turns\` field is new to agentic analytics. It measures friction — the fewer turns to checkout, the better the agent integration.
+
+### The Agentic Funnel
+
+Instead of Page → PDP → Cart → Checkout, the agentic funnel is:
+
+1. **Intent Capture** — Agent interprets user command
+2. **Product Resolution** — UCP lookup matches intent to variant
+3. **Cart Construction** — Cart vector assembled and embedded in context
+4. **Checkout Execution** — Agent calls checkout API directly
+5. **Telemetry Emission** — Event emitted with full session context
+
+Goofre's analytics dashboard surfaces this funnel in real time, broken down by agent source, merchant, and intent category.
+
+See how the checkout step executes: {{bridge:module-5}}.
+`
+            },
+            {
+                id: 'module-5',
+                type: 'module',
+                order: 5,
+                title: 'Agentic Checkout Architecture',
+                description: 'How AI agents complete transactions without cart pages, redirects, or human intervention.',
+                readTime: '8 min',
+                tags: ['Checkout', 'Agents'],
+                content: `
+## The Checkout That Happens in Context
+
+In traditional commerce, checkout is a page. A form. A redirect chain. A payment provider iframe. This architecture was designed for a human with eyes and a mouse.
+
+An AI agent has none of those. It has a context window, API access, and a task to complete.
+
+Goofre's checkout layer is designed for this: a single API call that accepts a UCP cart vector and returns a confirmed order — no redirects, no session state, no payment pages.
+
+### The Checkout Flow
+
+\`\`\`
+Agent Context Window
+    │
+    ├─ Reads cart_vector from UCP
+    ├─ Calls POST /v1/checkout/execute
+    │   ├─ Validates checkout_token (TTL, HMAC)
+    │   ├─ Resolves payment method from merchant vault
+    │   ├─ Calls payment provider (Stripe)
+    │   └─ Emits checkout.completed event
+    └─ Returns { order_id, confirmation, eta }
+\`\`\`
+
+The agent receives a structured confirmation object it can relay verbally to the user: *"Done. Your order ships in 2 days. Order ID is GFR-4829."*
+
+### Payment Vaulting
+
+For agentic checkout to work without human intervention, payment credentials must be pre-authorized. Goofre uses a **merchant-side vault** — the merchant's existing payment processor stores a payment method token that Goofre can reference without ever handling raw card data.
+
+This is PCI-compliant: Goofre never sees card numbers. The vault token is issued once (by the user's first manual purchase) and reused by agents for all subsequent transactions within the user's consent boundary.
+
+### Consent Boundaries
+
+Agentic checkout requires explicit user consent to operate autonomously. Goofre enforces:
+
+- **Category locks** — Agents can only transact within pre-approved product categories
+- **Spend limits** — Hard caps per transaction and per rolling period
+- **Confirmation hooks** — Optional "confirm before purchase" interruption for high-value orders
+
+These boundaries are configured by the merchant and stored in the Goofre OS merchant profile.
+
+---
+
+You've completed the Goofre module track. Explore the supplementary content — videos and perspectives — below.
+`
+            }
+        ];
+
+        const supplementaryData = [
             {
                 id: 'video-1',
                 type: 'video',
@@ -319,13 +554,13 @@ In this presentation, we explore how to construct dynamic cart sessions that can
 <div class="aspect-video bg-zinc-800 rounded-lg flex items-center justify-center my-8 border border-bordercolor shadow-inner">
     <div class="text-center">
         <i data-lucide="play-circle" class="w-12 h-12 text-muted mx-auto mb-2 opacity-50"></i>
-        <p class="text-sm font-mono text-muted">Video Player Placeholder</p>
+        <p class="text-sm font-mono text-muted">Video coming soon</p>
     </div>
 </div>
 
 The core principle relies on utilizing API-first commerce backends (like MedusaJS) to construct a localized \`cart_id\` that is injected into the LLM system prompt. 
 
-See how this integrates with the overall system in {{bridge:module-1}}.
+See how this integrates with the overall system in {{bridge:module-4}}.
 `
             },
             {
@@ -350,131 +585,175 @@ The **Universal Commerce Protocol (UCP)** defines a strict schema that allows me
 
 ### The Solution
 
-A unified standard. By adopting UCP, agents can programmatically traverse a product catalog, query variant availability in real time, and execute a checkout vector—all without loading a webpage.
+A unified standard. By adopting UCP, agents can programmatically traverse a product catalog, query variant availability in real time, and execute a checkout vector — all without loading a webpage.
 
-Learn more about how Goofre processes incoming data in {{bridge:module-1}}.
-`
-            },
-            {
-                id: 'module-2',
-                type: 'module',
-                title: 'Goofre Analytics Engine',
-                description: 'Real-time telemetry tracking for AI-driven conversions.',
-                readTime: '6 min',
-                tags: ['Analytics', 'Telemetry'],
-                content: `
-## Tracking Agentic Conversions
-
-Traditional analytics rely on pixels and pageviews. In Agentic Commerce, there are no pages. A user might complete an entire purchase inside a WhatsApp chat powered by Gemini.
-
-How do you attribute the sale?
-
-### Event Signatures
-
-Goofre captures telemetry at the API layer. Every time a cart is modified or completed, an event is emitted encapsulating the \`agent_source\`, \`session_id\`, and \`intent_vector\`.
-
-\`\`\`json
-{
-  "event_type": "checkout.completed",
-  "source": "gemini_voice_assistant",
-  "metadata": {
-     "conversation_turns": 4,
-     "cart_value": 149.99
-  }
-}
-\`\`\`
+Learn more about the full UCP spec in {{bridge:module-3}}.
 `
             }
         ];
 
-        // --- STATE ---
+        // ─── STATE ──────────────────────────────────────────────────────────────
         let currentFilter = 'all';
-        let isDevMode = false;
         let currentSheetId = null;
 
-        // --- DOM ELEMENTS ---
-        const bentoGrid = document.getElementById('bento-grid');
-        const sheetOverlay = document.getElementById('sheet-overlay');
-        const sideSheet = document.getElementById('side-sheet');
-        const sheetContent = document.getElementById('sheet-content');
-        
-        const labelConcept = document.getElementById('label-concept');
-        const labelCode = document.getElementById('label-code');
-        const devToggleThumb = document.getElementById('dev-toggle-thumb');
+        // Persist unlocked modules set in localStorage
+        const STORAGE_KEY = 'gf_completed_modules';
+        function getCompleted() {
+            try { return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '["module-1"]')); }
+            catch { return new Set(['module-1']); }
+        }
+        function saveCompleted(set) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
+        }
 
-        // --- RENDERING ---
+        // ─── DOM ─────────────────────────────────────────────────────────────────
+        const moduleTrackEl = document.getElementById('module-track');
+        const bentoGrid     = document.getElementById('bento-grid');
+        const sheetOverlay  = document.getElementById('sheet-overlay');
+        const sideSheet     = document.getElementById('side-sheet');
+        const sheetContent  = document.getElementById('sheet-content');
+
+        // ─── ICONS ───────────────────────────────────────────────────────────────
         function getIconForType(type) {
             switch(type) {
                 case 'module': return '<i data-lucide="blocks" class="w-5 h-5 text-blue-400"></i>';
-                case 'video': return '<i data-lucide="play-circle" class="w-5 h-5 text-red-400"></i>';
-                case 'blog': return '<i data-lucide="file-text" class="w-5 h-5 text-emerald-400"></i>';
-                default: return '<i data-lucide="file" class="w-5 h-5 text-muted"></i>';
+                case 'video':  return '<i data-lucide="play-circle" class="w-5 h-5 text-red-400"></i>';
+                case 'blog':   return '<i data-lucide="file-text" class="w-5 h-5 text-emerald-400"></i>';
+                default:       return '<i data-lucide="file" class="w-5 h-5 text-muted"></i>';
             }
         }
 
-        function renderGrid() {
-            bentoGrid.innerHTML = '';
-            
-            const filteredData = currentFilter === 'all' 
-                ? libraryData 
-                : libraryData.filter(item => item.type === currentFilter);
+        // ─── TOAST ───────────────────────────────────────────────────────────────
+        function showToast(msg) {
+            const t = document.createElement('div');
+            t.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[9999] bg-zinc-800 border border-zinc-700 text-white text-sm px-5 py-3 rounded-xl shadow-xl flex items-center gap-2 transition-all';
+            t.innerHTML = `<i data-lucide="lock" class="w-4 h-4 text-yellow-400"></i> ${msg}`;
+            document.body.appendChild(t);
+            lucide.createIcons();
+            setTimeout(() => t.remove(), 2500);
+        }
 
-            filteredData.forEach((item, index) => {
-                // Base card classes — col-span applied directly so h-full resolves against the grid row
-                let cardClasses = 'border border-bordercolor bg-pane/60 hover:bg-zinc-800/40 rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden relative group';
+        // ─── MODULE TRACK RENDER ─────────────────────────────────────────────────
+        function renderModuleTrack() {
+            const completed = getCompleted();
+            moduleTrackEl.innerHTML = '';
 
-                // First module gets a featured wide card
-                if (index === 0 && item.type === 'module') {
-                    cardClasses += ' md:col-span-2';
+            moduleTrack.forEach((mod, idx) => {
+                const prevId     = idx > 0 ? moduleTrack[idx - 1].id : null;
+                const isUnlocked = idx === 0 || completed.has(prevId);
+                const isDone     = completed.has(mod.id);
+                const numLabel   = String(mod.order).padStart(2, '0');
+
+                const card = document.createElement('div');
+                card.className = [
+                    'relative flex flex-col rounded-2xl border transition-all duration-300 flex-1 min-w-[200px] max-w-[260px]',
+                    isUnlocked
+                        ? 'border-bordercolor bg-pane/60 cursor-pointer group hover:border-goofre/40 hover:bg-zinc-800/40'
+                        : 'border-zinc-800/60 bg-zinc-900/30 cursor-not-allowed opacity-50 select-none'
+                ].join(' ');
+
+                card.innerHTML = `
+                    <div class="p-5 flex flex-col justify-between h-full min-h-[160px]">
+                        <!-- Top row -->
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="text-[11px] font-mono text-zinc-600 uppercase tracking-widest">${numLabel}</span>
+                            ${isDone
+                                ? '<span class="flex items-center gap-1 text-[10px] text-emerald-400 font-mono"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Done</span>'
+                                : isUnlocked
+                                    ? '<i data-lucide="blocks" class="w-4 h-4 text-blue-400 opacity-70"></i>'
+                                    : '<i data-lucide="lock" class="w-4 h-4 text-zinc-600"></i>'
+                            }
+                        </div>
+                        <!-- Content -->
+                        <div>
+                            <div class="flex flex-wrap gap-1 mb-2">
+                                ${mod.tags.map(t => `<span class="text-[9px] uppercase font-semibold tracking-wider px-1.5 py-0.5 rounded bg-zinc-800/80 text-zinc-500 border border-zinc-700/40">${t}</span>`).join('')}
+                            </div>
+                            <h3 class="text-sm font-semibold leading-snug text-white mb-1">${mod.title}</h3>
+                            <p class="text-[11px] text-zinc-500 leading-relaxed line-clamp-2">${mod.description}</p>
+                        </div>
+                        <!-- Read time -->
+                        <div class="mt-3 text-[10px] font-mono text-zinc-600 uppercase tracking-widest">${mod.readTime}</div>
+                    </div>
+                    ${isUnlocked ? '<div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-goofre/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>' : ''}
+                `;
+
+                if (isUnlocked) {
+                    card.addEventListener('click', () => openSheet(mod.id));
+                } else {
+                    card.addEventListener('click', () => showToast(`Complete Module ${idx} to unlock this`));
                 }
 
-                // Height: featured card is taller, others are uniform
-                const minH = (index === 0 && item.type === 'module') ? 'min-h-[280px]' : 'min-h-[220px]';
+                // Connector arrow between cards
+                if (idx < moduleTrack.length - 1) {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'flex-shrink-0 flex items-center self-center text-zinc-700';
+                    arrow.innerHTML = '<i data-lucide="chevron-right" class="w-4 h-4"></i>';
+                    moduleTrackEl.appendChild(card);
+                    moduleTrackEl.appendChild(arrow);
+                } else {
+                    moduleTrackEl.appendChild(card);
+                }
+            });
 
-                const fontClass = isDevMode ? 'font-mono tracking-tight' : 'font-sans';
+            lucide.createIcons();
+        }
+
+        // ─── BENTO GRID RENDER (videos + blogs only) ─────────────────────────────
+        function renderGrid() {
+            bentoGrid.innerHTML = '';
+
+            const allSupp = currentFilter === 'all'
+                ? supplementaryData
+                : currentFilter === 'module'
+                    ? []
+                    : supplementaryData.filter(item => item.type === currentFilter);
+
+            if (allSupp.length === 0) {
+                bentoGrid.innerHTML = '<p class="text-zinc-600 text-sm col-span-full text-center py-8">No supplementary content for this filter.</p>';
+                lucide.createIcons();
+                return;
+            }
+
+            allSupp.forEach((item, index) => {
+                let cardClasses = 'border border-bordercolor bg-pane/60 hover:bg-zinc-800/40 rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden relative group';
+                if (index === 0) cardClasses += ' md:col-span-2';
+                const minH = index === 0 ? 'min-h-[220px]' : 'min-h-[200px]';
 
                 const cardHtml = `
                     <div class="${cardClasses} ${minH} flex flex-col" onclick="openSheet('${item.id}')">
-                        <!-- Gradient Hover Effect -->
                         <div class="absolute inset-0 bg-gradient-to-br from-goofre/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
                         <div class="p-6 flex flex-col justify-between flex-1 relative z-10">
-                            <!-- Top row: icon + read time pinned to top -->
                             <div class="flex items-start justify-between">
                                 <div class="p-2.5 bg-zinc-900 rounded-xl border border-zinc-800 shadow-inner">
                                     ${getIconForType(item.type)}
                                 </div>
-                                <span class="text-[11px] font-mono text-muted uppercase tracking-widest bg-zinc-900 px-2.5 py-1 rounded-md border border-zinc-800">
-                                    ${item.readTime}
-                                </span>
+                                <span class="text-[11px] font-mono text-muted uppercase tracking-widest bg-zinc-900 px-2.5 py-1 rounded-md border border-zinc-800">${item.readTime}</span>
                             </div>
-
-                            <!-- Bottom section: tags + title + desc anchored to bottom -->
                             <div class="pt-4">
                                 <div class="flex flex-wrap gap-1.5 mb-2.5">
                                     ${item.tags.map(tag => `<span class="text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 rounded-md bg-zinc-800/80 text-zinc-400 border border-zinc-700/50">${tag}</span>`).join('')}
                                 </div>
-                                <h3 class="text-base font-semibold mb-1.5 text-white leading-snug ${fontClass}">${item.title}</h3>
+                                <h3 class="text-base font-semibold mb-1.5 text-white leading-snug font-sans">${item.title}</h3>
                                 <p class="text-zinc-500 text-sm leading-relaxed line-clamp-2">${item.description}</p>
                             </div>
                         </div>
                     </div>
                 `;
-
                 bentoGrid.innerHTML += cardHtml;
             });
-
-            // Re-bind Lucide icons
             lucide.createIcons();
         }
 
-        // --- CONTENT PARSING & BRIDGES ---
+        // ─── CONTENT BRIDGES ────────────────────────────────────────────────────
+        function findItem(id) {
+            return moduleTrack.find(d => d.id === id) || supplementaryData.find(d => d.id === id);
+        }
         function createBridgeHtml(targetId) {
-            const target = libraryData.find(d => d.id === targetId);
+            const target = findItem(targetId);
             if (!target) return `<span class="text-red-500">Broken Link [${targetId}]</span>`;
-
             return `
-                <div onclick="switchSheet('${targetId}')" class="my-6 border border-bordercolor bg-[#151518] hover:bg-[#1a1a1e] rounded-xl p-4 cursor-pointer transition-all flex items-center justify-between group shadow-sm">
+                <div onclick="openSheet('${targetId}')" class="my-6 border border-bordercolor bg-[#151518] hover:bg-[#1a1a1e] rounded-xl p-4 cursor-pointer transition-all flex items-center justify-between group shadow-sm">
                     <div class="flex items-center gap-4">
                         <div class="p-2 bg-zinc-900 rounded-lg border border-zinc-800 group-hover:border-goofre/50 transition-colors">
                             ${getIconForType(target.type)}
@@ -488,58 +767,49 @@ Goofre captures telemetry at the API layer. Every time a cart is modified or com
                 </div>
             `;
         }
-
         function renderMarkdown(rawMd) {
             const html = marked.parse(rawMd);
-            
-            // Regex to find {{bridge:id}}
-            const bridgeRegex = /\{\{bridge:([^}]+)\}\}/g;
-            return html.replace(bridgeRegex, (match, targetId) => {
-                return createBridgeHtml(targetId);
-            });
+            return html.replace(/\{\{bridge:([^}]+)\}\}/g, (_, id) => createBridgeHtml(id));
         }
 
-        // --- SIDE SHEET UI ---
+        // ─── SIDE SHEET ───────────────────────────────────────────────────────────
         function openSheet(id) {
-            const item = libraryData.find(d => d.id === id);
+            const item = findItem(id);
             if (!item) return;
-
             currentSheetId = id;
 
-            // Render Header & Markdown
-            const fontClass = 'font-sans'; // Always font-sans
-            
+            // Mark module as completed and unlock next
+            if (item.type === 'module') {
+                const completed = getCompleted();
+                completed.add(id);
+                saveCompleted(completed);
+                renderModuleTrack(); // re-render to show new unlock
+            }
+
             sheetContent.innerHTML = `
                 <div class="mb-8">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="p-2 bg-zinc-900 rounded-lg border border-zinc-800 shadow-sm">
                             ${getIconForType(item.type)}
                         </div>
-                        <span class="text-xs font-mono text-muted uppercase tracking-widest bg-zinc-900 px-2 py-1 rounded-md border border-zinc-800">
-                            ${item.type}
-                        </span>
+                        <span class="text-xs font-mono text-muted uppercase tracking-widest bg-zinc-900 px-2 py-1 rounded-md border border-zinc-800">${item.type}${item.order ? ` · ${String(item.order).padStart(2,'0')}` : ''}</span>
                         <span class="text-xs font-mono text-muted">·</span>
                         <span class="text-xs font-mono text-muted">${item.readTime}</span>
                     </div>
-                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight ${fontClass}">${item.title}</h1>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight font-sans">${item.title}</h1>
                     <p class="text-lg text-muted">${item.description}</p>
                 </div>
-                
                 <div class="w-full h-px bg-bordercolor mb-8"></div>
-                
-                <div class="${fontClass} markdown-body">
+                <div class="font-sans markdown-body">
                     ${renderMarkdown(item.content)}
                 </div>
             `;
 
             lucide.createIcons();
-
-            // Set URL
             const newUrl = new URL(window.location);
             newUrl.searchParams.set('id', id);
             window.history.pushState({ id }, '', newUrl);
 
-            // Animate In
             sheetOverlay.classList.remove('opacity-0', 'pointer-events-none');
             sheetOverlay.classList.add('opacity-100');
             sideSheet.classList.remove('translate-x-full');
@@ -551,112 +821,57 @@ Goofre captures telemetry at the API layer. Every time a cart is modified or com
             sheetOverlay.classList.add('opacity-0', 'pointer-events-none');
             sideSheet.classList.remove('translate-x-0');
             sideSheet.classList.add('translate-x-full');
-
-            // Clear URL
             const newUrl = new URL(window.location);
             newUrl.searchParams.delete('id');
             window.history.pushState({}, '', newUrl);
-            
             currentSheetId = null;
         }
 
         function switchSheet(id) {
-            // Briefly fade content then swap
             sheetContent.style.opacity = '0';
             setTimeout(() => {
                 openSheet(id);
                 sheetContent.style.opacity = '1';
-                sheetContent.scrollTo(0,0);
+                sheetContent.scrollTo(0, 0);
             }, 200);
         }
 
         function copyLink() {
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
-                alert('Link copied to clipboard!');
-            });
+            navigator.clipboard.writeText(window.location.href)
+                .then(() => showToast('Link copied!'));
         }
 
-        // --- CONTROLS ---
+        // ─── FILTER ───────────────────────────────────────────────────────────────
         function setFilter(type) {
             currentFilter = type;
-            
-            // Update Active Tab Styles
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                if(btn.dataset.filter === type) {
-                    btn.classList.remove('text-muted', 'hover:bg-zinc-800/50');
-                    btn.classList.add('text-white', 'bg-zinc-800');
-                } else {
-                    btn.classList.add('text-muted', 'hover:bg-zinc-800/50');
-                    btn.classList.remove('text-white', 'bg-zinc-800');
-                }
+                const active = btn.dataset.filter === type;
+                btn.classList.toggle('text-white', active);
+                btn.classList.toggle('bg-zinc-800', active);
+                btn.classList.toggle('text-muted', !active);
+                btn.classList.toggle('hover:bg-zinc-800/50', !active);
             });
-
+            // Module track: show/hide based on filter
+            moduleTrackEl.parentElement.style.display =
+                (type === 'all' || type === 'module') ? '' : 'none';
             renderGrid();
         }
 
-        // toggleDevMode removed — concept-only mode
-        function _unused_toggleDevMode() {
-            isDevMode = !isDevMode;
-            
-            if(isDevMode) {
-                devToggleThumb.classList.remove('translate-x-1');
-                devToggleThumb.classList.add('translate-x-6');
-                
-                labelConcept.classList.replace('text-goofre', 'text-muted');
-                labelConcept.classList.replace('font-semibold', 'font-normal');
-                
-                labelCode.classList.replace('text-muted', 'text-goofre');
-                labelCode.classList.replace('font-normal', 'font-semibold');
-            } else {
-                devToggleThumb.classList.remove('translate-x-6');
-                devToggleThumb.classList.add('translate-x-1');
-                
-                labelConcept.classList.replace('text-muted', 'text-goofre');
-                labelConcept.classList.replace('font-normal', 'font-semibold');
-                
-                labelCode.classList.replace('text-goofre', 'text-muted');
-                labelCode.classList.replace('font-semibold', 'font-normal');
-            }
-
-            renderGrid();
-
-            // Re-render open sheet if present
-            if (currentSheetId) {
-                const sheetScroll = sheetContent.scrollTop;
-                openSheet(currentSheetId);
-                sheetContent.scrollTop = sheetScroll;
-            }
-        }
-
-        // --- INIT ---
+        // ─── INIT ─────────────────────────────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
-            // Check URL parameters for direct link
-            const urlParams = new URLSearchParams(window.location.search);
-            const idParam = urlParams.get('id');
-            
+            renderModuleTrack();
             renderGrid();
             lucide.createIcons();
-
-            if (idParam) {
-                // Short timeout to ensure icons and grid render before animating
-                setTimeout(() => openSheet(idParam), 100);
-            }
+            const id = new URLSearchParams(window.location.search).get('id');
+            if (id) setTimeout(() => openSheet(id), 100);
         });
 
-        // Handle back/forward browser buttons closing/opening sheet
         window.addEventListener('popstate', (e) => {
-            if (e.state && e.state.id) {
-                openSheet(e.state.id);
-            } else {
-                // Determine if URL has ID (if arrived via a bookmark)
-                const urlParams = new URLSearchParams(window.location.search);
-                const idParam = urlParams.get('id');
-                if (idParam) openSheet(idParam);
-                else closeSheet();
-            }
+            const id = e.state?.id || new URLSearchParams(window.location.search).get('id');
+            if (id) openSheet(id); else closeSheet();
         });
     </script>
+
 </body>
 
 </html>
