@@ -208,16 +208,28 @@
                 </div>
             </div>
 
-            <!-- Module Track -->
+            <!-- Foundations Module Track -->
             <div id="module-track-section" class="mb-10">
                 <div class="flex items-center gap-3 mb-5">
                     <i data-lucide="layout-template" class="w-4 h-4 text-goofre"></i>
-                    <h2 class="text-xs font-mono uppercase tracking-widest text-zinc-500">Learning Path · 5 Modules</h2>
+                    <h2 class="text-xs font-mono uppercase tracking-widest text-zinc-500">Foundations Path · 5 Modules</h2>
                     <div class="flex-1 h-px bg-bordercolor/40"></div>
                 </div>
                 <!-- Horizontal scrollable module track — populated by JS -->
                 <div id="module-track" class="flex items-stretch gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
                     <!-- Module cards injected here -->
+                </div>
+            </div>
+
+            <!-- Developer Onboarding Track -->
+            <div id="onboarding-track-section" class="mb-10">
+                <div class="flex items-center gap-3 mb-5">
+                    <i data-lucide="terminal" class="w-4 h-4 text-emerald-500"></i>
+                    <h2 class="text-xs font-mono uppercase tracking-widest text-zinc-500">Developer Onboarding · 5 Modules</h2>
+                    <div class="flex-1 h-px bg-bordercolor/40"></div>
+                </div>
+                <div id="onboarding-track" class="flex items-stretch gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+                    <!-- Onboarding cards injected here -->
                 </div>
             </div>
 
@@ -538,6 +550,251 @@ You've completed the Goofre module track. Explore the supplementary content — 
             }
         ];
 
+        const onboardingTrack = [
+            {
+                id: 'onboard-1',
+                type: 'module',
+                order: 1,
+                title: 'The Developer Vision: Why Build for Agents?',
+                description: 'Understanding the shift from UI development to data engineering, and why UCP is the new storefront.',
+                readTime: '4 min',
+                tags: ['Vision', 'Paradigm'],
+                content: `
+## Building the Invisible Storefront
+
+For decades, commerce development meant pushing pixels: adjusting button hover states, optimizing image load times, and A/B testing checkout layouts. 
+
+Agentic commerce entirely removes the UI. The "user" is a large language model. The "interface" is an API. 
+
+### From Designers to Data Engineers
+
+When you build for Goofre, you are no longer building a storefront. You are building an **ontology**. Your primary job is to ensure that your backend data (from Shopify, Medusa, or a custom Postgres DB) is structured perfectly so that an LLM can parse it, reason about it, and execute a transaction against it without hallucinating.
+
+The Universal Commerce Protocol (UCP) is the schema that bridges this gap. 
+
+### Why the Shift Matters
+If a user asks an agent to *"Buy the flavor of protein powder I liked best last year"*, the agent must:
+1. Access the user's purchase history via secure API.
+2. Identify the specific variant ID of that past purchase.
+3. Call your store's inventory API to see if it's in stock.
+4. Construct a cart vector.
+5. Execute the vaulted payment checkout.
+
+All of this happens in milliseconds, far away from any HTML or CSS. In the next module, we'll look at the system architecture that makes this possible: {{bridge:onboard-2}}.
+`
+            },
+            {
+                id: 'onboard-2',
+                type: 'module',
+                order: 2,
+                title: 'System Architecture Overview',
+                description: 'A high-level diagram of how your backend, the Goofre Orchestrator, and the LLM communicate.',
+                readTime: '6 min',
+                tags: ['Architecture', 'System'],
+                content: `
+## The Agentic Flow
+
+To build for Goofre, you must understand where your infrastructure ends and Goofre begins. Goofre is a middleware layer that sits between your merchant backend (Shopify, BigCommerce, etc.) and the consumer-facing AI agents (Gemini, Claude, ChatGPT).
+
+### The Three Layers
+
+**1. The Merchant Layer (Your Stack)**
+Your existing e-commerce backend remains the single source of truth for inventory, pricing, and order management. You do not need to migrate off Shopify or Medusa. 
+
+**2. The Goofre Orchestrator (The Middleware)**
+Goofre acts as the translator and security vault. It ingests your unstructured webhooks, normalizes them into UCP, and maintains the PCI-compliant payment vaults for your customers.
+
+**3. The Agentic Layer (The Consumer)**
+This is the LLM operating on behalf of the user. It reads the UCP data exposed by Goofre and issues commands (like \`execute_checkout\`) back to Goofre.
+
+### The Architecture Diagram
+
+\`\`\`
+[ Your Shopify/Medusa Backend ]
+        │
+        │ 1. Emits Webhooks (Product update, inventory change)
+        ▼
+[ Goofre Ingest Boundary ]
+        │
+        │ 2. Normalizes to Universal Commerce Protocol (UCP)
+        ▼
+[ Goofre Graph / Vector Database ]
+        │
+        │ 3. LLM queries inventory / creates cart vector
+        ▼
+[ LLM Agent (Gemini/Claude) ]
+        │
+        │ 4. Issues signed Checkout Command
+        ▼
+[ Goofre Checkout Vault ]
+        │
+        │ 5. Charges vaulted card & issues order API call to your backend
+        ▼
+[ Your Shopify/Medusa Backend ] (Order Created)
+\`\`\`
+
+Ready to start building? Let's connect your ingest boundary in the next module: {{bridge:onboard-3}}.
+`
+            },
+            {
+                id: 'onboard-3',
+                type: 'module',
+                order: 3,
+                title: 'Step 1: Connecting the Ingest Boundary',
+                description: 'How to route your existing Shopify/Medusa webhooks into Goofre to format them into UCP.',
+                readTime: '8 min',
+                tags: ['Ingest', 'Implementation'],
+                content: `
+## Feeding the Orchestrator
+
+The first step in integrating with Goofre is exposing your catalog to the LLMs. Instead of requiring you to build a custom API, Goofre simply listens to the webhooks your platform already emits.
+
+### Configuring Your Webhooks
+
+In your merchant platform (e.g., Shopify), you will configure a webhook to fire on \`product/update\` and \`inventory/level/update\`.
+
+Destination URL: \`https://ingest.goofre.com/v1/webhooks/shopify\`
+
+### The Goofre Transformation
+
+When Shopify sends an update, it looks like this:
+\`\`\`json
+{
+  "id": 1234567,
+  "title": "Heavy Cotton T-Shirt",
+  "variants": [
+    { "id": 987, "price": "19.99", "inventory_quantity": 42 }
+  ]
+}
+\`\`\`
+
+Goofre captures this payload, validates the HMAC signature, and passes it through our **UCP Normalizer**. The output is a highly semantic, agent-readable node:
+
+\`\`\`json
+{
+  "ucp_version": "1.0",
+  "product_id": "shp_1234567",
+  "title": "Heavy Cotton T-Shirt",
+  "variants": [
+    {
+      "variant_id": "shp_var_987",
+      "price": { "amount": 1999, "currency": "USD" },
+      "in_stock": true,
+      "qty_available": 42
+    }
+  ]
+}
+\`\`\`
+
+This standardizes everything. The LLM never has to guess if price is a string or an integer, or what currency it is in. 
+
+Once your data is flowing, agents can discover it. But how do they buy it? Let's look at Cart Vectors: {{bridge:onboard-4}}.
+`
+            },
+            {
+                id: 'onboard-4',
+                type: 'module',
+                order: 4,
+                title: 'Step 2: Managing the Cart Vector',
+                description: 'How to construct a stateless cart vector on the fly and inject it into the LLM context.',
+                readTime: '7 min',
+                tags: ['Carts', 'Vectors'],
+                content: `
+## The Stateless Cart
+
+In Web 2.0, a cart is a stateful session tied to a browser cookie. In Agentic Commerce, a cart is just a JSON object passed back and forth within an LLM's context window. We call this the **Cart Vector**.
+
+### Creating a Cart Vector
+
+When an AI agent determines a user wants to buy something, it calls the Goofre API to instantiate a Cart Vector.
+
+**Agent Request to Goofre:**
+\`\`\`json
+{
+  "action": "create_cart",
+  "merhant_id": "gfr_merch_882",
+  "items": [
+    { "variant_id": "shp_var_987", "qty": 1 }
+  ]
+}
+\`\`\`
+
+**Goofre Response (The Cart Vector):**
+\`\`\`json
+{
+  "cart_id": "gfr_cart_x8a9",
+  "items": [...],
+  "total": { "amount": 1999, "currency": "USD" },
+  "checkout_token": "eyJhbGc...",
+  "ttl_seconds": 3600
+}
+\`\`\`
+
+### Context Injection
+
+The LLM now holds this Cart Vector in its active memory. Because the vector contains the \`checkout_token\`, the agent has cryptographically secure authorization to execute this specific cart against the user's vaulted payment profile within the next 3600 seconds.
+
+If the user changes their mind and says, *"Actually add a second shirt,"* the LLM simply calls the update API, receives a new Cart Vector (and a new token signature), and continues the conversation.
+
+To see how the LLM finalizes the purchase using the token, proceed to the final module: {{bridge:onboard-5}}.
+`
+            },
+            {
+                id: 'onboard-5',
+                type: 'module',
+                order: 5,
+                title: 'Step 3: Handling Agentic Checkout',
+                description: 'Securely vaulted payments, processing orders via the Goofre API, and emitting telemetry.',
+                readTime: '9 min',
+                tags: ['Checkout', 'Payments'],
+                content: `
+## Executing the Transaction
+
+The final step is the checkout execution. At this point, the LLM has confirmed the user's intent and holds a valid Cart Vector and \`checkout_token\`. 
+
+### The Execute Command
+
+The agent issues a \`POST\` to the Goofre execution endpoint:
+
+\`\`\`json
+POST https://api.goofre.com/v1/checkout/execute
+Authorization: Bearer <agent_jwt>
+
+{
+  "cart_id": "gfr_cart_x8a9",
+  "checkout_token": "eyJhbGc...",
+  "user_vault_id": "usr_vlt_92jka"
+}
+\`\`\`
+
+### What happens behind the scenes?
+
+Goofre receives this request and performs the following orchestrations in under 800ms:
+
+1. **Token Validation**: Confirms the \`checkout_token\` hasn't expired and hasn't been tampered with.
+2. **Vault Retrieval**: Looks up the \`user_vault_id\` to retrieve the Stripe/Adyen payment token. (Goofre never touches raw PAN data).
+3. **Payment Authorization**: Charges the vaulted card via the payment processor.
+4. **Order Creation**: Pushes an \`Order Created\` webhook *back* to your Shopify/Medusa backend so fulfillment can begin.
+5. **Telemetry Emission**: Logs an \`agentic_checkout.completed\` event for your Goofre Analytics dashboard.
+
+### The Response
+
+Goofre responds to the agent:
+\`\`\`json
+{
+  "status": "success",
+  "order_id": "ORD-8829-X",
+  "estimated_delivery": "2026-03-22"
+}
+\`\`\`
+
+The agent parses this and tells the user: *"All set! I've placed the order. It should arrive by Thursday. Your order number is ORD-8829-X."*
+
+**Congratulations.** You now understand the end-to-end flow of Agentic Commerce on Goofre.
+`
+            }
+        ];
+
         const supplementaryData = [
             {
                 id: 'video-checkout-flows',
@@ -708,13 +965,15 @@ The platforms have spoken: the future is highly autonomous, deeply programmatic,
         let currentSheetId = null;
 
         // Persist unlocked modules set in localStorage
-        const STORAGE_KEY = 'gf_completed_modules';
-        function getCompleted() {
-            try { return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '["module-1"]')); }
-            catch { return new Set(['module-1']); }
+        const STORAGE_KEY_FOUNDATIONS = 'gf_completed_modules';
+        const STORAGE_KEY_ONBOARDING = 'gf_onboarding_modules';
+
+        function getCompleted(key) {
+            try { return new Set(JSON.parse(localStorage.getItem(key) || (key === STORAGE_KEY_FOUNDATIONS ? '["module-1"]' : '["onboard-1"]'))); }
+            catch { return new Set([key === STORAGE_KEY_FOUNDATIONS ? 'module-1' : 'onboard-1']); }
         }
-        function saveCompleted(set) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
+        function saveCompleted(key, set) {
+            localStorage.setItem(key, JSON.stringify([...set]));
         }
 
         // ─── DOM ─────────────────────────────────────────────────────────────────
@@ -745,12 +1004,13 @@ The platforms have spoken: the future is highly autonomous, deeply programmatic,
         }
 
         // ─── MODULE TRACK RENDER ─────────────────────────────────────────────────
-        function renderModuleTrack() {
-            const completed = getCompleted();
-            moduleTrackEl.innerHTML = '';
+        function renderTrack(dataArray, containerId, storageKey, accentColor) {
+            const container = document.getElementById(containerId);
+            const completed = getCompleted(storageKey);
+            container.innerHTML = '';
 
-            moduleTrack.forEach((mod, idx) => {
-                const prevId     = idx > 0 ? moduleTrack[idx - 1].id : null;
+            dataArray.forEach((mod, idx) => {
+                const prevId     = idx > 0 ? dataArray[idx - 1].id : null;
                 const isUnlocked = idx === 0 || completed.has(prevId);
                 const isDone     = completed.has(mod.id);
                 const numLabel   = String(mod.order).padStart(2, '0');
@@ -759,54 +1019,58 @@ The platforms have spoken: the future is highly autonomous, deeply programmatic,
                 card.className = [
                     'relative flex flex-col rounded-2xl border transition-all duration-300 flex-1 min-w-[200px] max-w-[260px]',
                     isUnlocked
-                        ? 'border-bordercolor bg-pane/60 cursor-pointer group hover:border-goofre/40 hover:bg-zinc-800/40'
+                        ? \`border-bordercolor bg-pane/60 cursor-pointer group hover:border-\${accentColor}/40 hover:bg-zinc-800/40\`
                         : 'border-zinc-800/60 bg-zinc-900/30 cursor-not-allowed opacity-50 select-none'
                 ].join(' ');
 
-                card.innerHTML = `
+                card.innerHTML = \`
                     <div class="p-5 flex flex-col justify-between h-full min-h-[160px]">
                         <!-- Top row -->
                         <div class="flex items-start justify-between mb-3">
-                            <span class="text-[11px] font-mono text-zinc-600 uppercase tracking-widest">${numLabel}</span>
-                            ${isDone
+                            <span class="text-[11px] font-mono text-zinc-600 uppercase tracking-widest">\${numLabel}</span>
+                            \${isDone
                                 ? '<span class="flex items-center gap-1 text-[10px] text-emerald-400 font-mono"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Done</span>'
                                 : isUnlocked
-                                    ? '<i data-lucide="blocks" class="w-4 h-4 text-blue-400 opacity-70"></i>'
+                                    ? \`<i data-lucide="\${containerId === 'onboarding-track' ? 'terminal' : 'blocks'}" class="w-4 h-4 text-\${accentColor} opacity-70"></i>\`
                                     : '<i data-lucide="lock" class="w-4 h-4 text-zinc-600"></i>'
                             }
                         </div>
                         <!-- Content -->
                         <div>
                             <div class="flex flex-wrap gap-1 mb-2">
-                                ${mod.tags.map(t => `<span class="text-[9px] uppercase font-semibold tracking-wider px-1.5 py-0.5 rounded bg-zinc-800/80 text-zinc-500 border border-zinc-700/40">${t}</span>`).join('')}
+                                \${mod.tags.map(t => \`<span class="text-[9px] uppercase font-semibold tracking-wider px-1.5 py-0.5 rounded bg-zinc-800/80 text-zinc-500 border border-zinc-700/40">\${t}</span>\`).join('')}
                             </div>
-                            <h3 class="text-sm font-semibold leading-snug text-white mb-1">${mod.title}</h3>
-                            <p class="text-[11px] text-zinc-500 leading-relaxed line-clamp-2">${mod.description}</p>
+                            <h3 class="text-sm font-semibold leading-snug text-white mb-1">\${mod.title}</h3>
+                            <p class="text-[11px] text-zinc-500 leading-relaxed line-clamp-2">\${mod.description}</p>
                         </div>
                         <!-- Read time -->
-                        <div class="mt-3 text-[10px] font-mono text-zinc-600 uppercase tracking-widest">${mod.readTime}</div>
+                        <div class="mt-3 text-[10px] font-mono text-zinc-600 uppercase tracking-widest">\${mod.readTime}</div>
                     </div>
-                    ${isUnlocked ? '<div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-goofre/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>' : ''}
-                `;
+                    \${isUnlocked ? \`<div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-\${accentColor}/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>\` : ''}
+                \`;
 
                 if (isUnlocked) {
                     card.addEventListener('click', () => openSheet(mod.id));
                 } else {
-                    card.addEventListener('click', () => showToast(`Complete Module ${idx} to unlock this`));
+                    card.addEventListener('click', () => showToast(\`Complete Module \${idx} to unlock this\`));
                 }
 
                 // Connector arrow between cards
-                if (idx < moduleTrack.length - 1) {
+                if (idx < dataArray.length - 1) {
                     const arrow = document.createElement('div');
                     arrow.className = 'flex-shrink-0 flex items-center self-center text-zinc-700';
                     arrow.innerHTML = '<i data-lucide="chevron-right" class="w-4 h-4"></i>';
-                    moduleTrackEl.appendChild(card);
-                    moduleTrackEl.appendChild(arrow);
+                    container.appendChild(card);
+                    container.appendChild(arrow);
                 } else {
-                    moduleTrackEl.appendChild(card);
+                    container.appendChild(card);
                 }
             });
+        }
 
+        function renderAllTracks() {
+            renderTrack(moduleTrack, 'module-track', STORAGE_KEY_FOUNDATIONS, 'goofre');
+            renderTrack(onboardingTrack, 'onboarding-track', STORAGE_KEY_ONBOARDING, 'emerald-500');
             lucide.createIcons();
         }
 
@@ -858,7 +1122,7 @@ The platforms have spoken: the future is highly autonomous, deeply programmatic,
 
         // ─── CONTENT BRIDGES ────────────────────────────────────────────────────
         function findItem(id) {
-            return moduleTrack.find(d => d.id === id) || supplementaryData.find(d => d.id === id);
+            return moduleTrack.find(d => d.id === id) || onboardingTrack.find(d => d.id === id) || supplementaryData.find(d => d.id === id);
         }
         function createBridgeHtml(targetId) {
             const target = findItem(targetId);
@@ -891,10 +1155,14 @@ The platforms have spoken: the future is highly autonomous, deeply programmatic,
 
             // Mark module as completed and unlock next
             if (item.type === 'module') {
-                const completed = getCompleted();
+                // Determine which track this module belongs to
+                const isOnboarding = id.startsWith('onboard-');
+                const storageKey = isOnboarding ? STORAGE_KEY_ONBOARDING : STORAGE_KEY_FOUNDATIONS;
+                
+                const completed = getCompleted(storageKey);
                 completed.add(id);
-                saveCompleted(completed);
-                renderModuleTrack(); // re-render to show new unlock
+                saveCompleted(storageKey, completed);
+                renderAllTracks(); // re-render to show new unlock
             }
 
             sheetContent.innerHTML = `
@@ -963,14 +1231,15 @@ The platforms have spoken: the future is highly autonomous, deeply programmatic,
                 btn.classList.toggle('hover:bg-zinc-800/50', !active);
             });
             // Module track: show/hide based on filter
-            moduleTrackEl.parentElement.style.display =
-                (type === 'all' || type === 'module') ? '' : 'none';
+            const showModules = (type === 'all' || type === 'module');
+            document.getElementById('module-track-section').style.display = showModules ? '' : 'none';
+            document.getElementById('onboarding-track-section').style.display = showModules ? '' : 'none';
             renderGrid();
         }
 
         // ─── INIT ─────────────────────────────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
-            renderModuleTrack();
+            renderAllTracks();
             renderGrid();
             lucide.createIcons();
             const id = new URLSearchParams(window.location.search).get('id');
