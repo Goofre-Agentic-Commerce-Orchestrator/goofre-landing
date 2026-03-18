@@ -430,45 +430,42 @@ Goofre captures telemetry at the API layer. Every time a cart is modified or com
                 : libraryData.filter(item => item.type === currentFilter);
 
             filteredData.forEach((item, index) => {
-                // Base card classes — no row-span, consistent min-h drives sizing
+                // Base card classes — col-span applied directly so h-full resolves against the grid row
                 let cardClasses = 'border border-bordercolor bg-pane/60 hover:bg-zinc-800/40 rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden relative group';
 
-                // First module gets a featured wide card; video gets a taller card
-                let wrapperClasses = '';
+                // First module gets a featured wide card
                 if (index === 0 && item.type === 'module') {
-                    wrapperClasses = 'md:col-span-2';
+                    cardClasses += ' md:col-span-2';
                 }
 
-                // Height class: featured card is taller, others are uniform
-                const minH = (index === 0 && item.type === 'module') ? 'min-h-[320px]' : 'min-h-[240px]';
+                // Height: featured card is taller, others are uniform
+                const minH = (index === 0 && item.type === 'module') ? 'min-h-[280px]' : 'min-h-[220px]';
 
                 const fontClass = isDevMode ? 'font-mono tracking-tight' : 'font-sans';
 
                 const cardHtml = `
-                    <div class="${wrapperClasses}">
-                        <div class="${cardClasses} ${minH} h-full" onclick="openSheet('${item.id}')">
-                            <!-- Gradient Hover Effect -->
-                            <div class="absolute inset-0 bg-gradient-to-br from-goofre/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="${cardClasses} ${minH}" onclick="openSheet('${item.id}')">
+                        <!-- Gradient Hover Effect -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-goofre/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                            <div class="p-6 flex flex-col justify-between h-full relative z-10">
-                                <!-- Top row: icon + read time pinned to top -->
-                                <div class="flex items-start justify-between">
-                                    <div class="p-2.5 bg-zinc-900 rounded-xl border border-zinc-800 shadow-inner">
-                                        ${getIconForType(item.type)}
-                                    </div>
-                                    <span class="text-[11px] font-mono text-muted uppercase tracking-widest bg-zinc-900 px-2.5 py-1 rounded-md border border-zinc-800">
-                                        ${item.readTime}
-                                    </span>
+                        <div class="p-6 flex flex-col justify-between h-full relative z-10">
+                            <!-- Top row: icon + read time pinned to top -->
+                            <div class="flex items-start justify-between">
+                                <div class="p-2.5 bg-zinc-900 rounded-xl border border-zinc-800 shadow-inner">
+                                    ${getIconForType(item.type)}
                                 </div>
+                                <span class="text-[11px] font-mono text-muted uppercase tracking-widest bg-zinc-900 px-2.5 py-1 rounded-md border border-zinc-800">
+                                    ${item.readTime}
+                                </span>
+                            </div>
 
-                                <!-- Bottom section: tags + title + desc anchored to bottom -->
-                                <div class="pt-4">
-                                    <div class="flex flex-wrap gap-1.5 mb-2.5">
-                                        ${item.tags.map(tag => `<span class="text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 rounded-md bg-zinc-800/80 text-zinc-400 border border-zinc-700/50">${tag}</span>`).join('')}
-                                    </div>
-                                    <h3 class="text-base font-semibold mb-1.5 text-white leading-snug ${fontClass}">${item.title}</h3>
-                                    <p class="text-zinc-500 text-sm leading-relaxed line-clamp-2">${item.description}</p>
+                            <!-- Bottom section: tags + title + desc anchored to bottom -->
+                            <div class="pt-4">
+                                <div class="flex flex-wrap gap-1.5 mb-2.5">
+                                    ${item.tags.map(tag => `<span class="text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 rounded-md bg-zinc-800/80 text-zinc-400 border border-zinc-700/50">${tag}</span>`).join('')}
                                 </div>
+                                <h3 class="text-base font-semibold mb-1.5 text-white leading-snug ${fontClass}">${item.title}</h3>
+                                <p class="text-zinc-500 text-sm leading-relaxed line-clamp-2">${item.description}</p>
                             </div>
                         </div>
                     </div>
